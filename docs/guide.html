@@ -43,7 +43,7 @@
 <li>Data is not 100% live <em>(We are constantly polling the MLS for new data but it could be an hour or so before new listings show up, and we refresh each listing every 24 hours)</em></li>
 </ul>
 
-<h3 id="toc_3">1. SearchByKeyword</h3>
+<h3 id="toc_3">SearchByKeyword</h3>
 
 <pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getListing()-&gt;searchByKeyword(<span class="variable">$preparedKeywords</span>);
 </code></pre>
@@ -79,7 +79,7 @@
 ]
 </code></pre>
 
-<h3 id="toc_6">2. Search</h3>
+<h3 id="toc_6">Search</h3>
 
 <pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getListing()-&gt;search(<span class="variable">$keywords</span>, <span class="variable">$maxPrice</span>, <span class="variable">$minPrice</span>, <span class="variable">$includeResidential</span>, <span class="variable">$includeLand</span>, <span class="variable">$includeCommercial</span>);
 </code></pre>
@@ -127,7 +127,7 @@
 ]
 </code></pre>
 
-<h3 id="toc_9">3. Listing Details</h3>
+<h3 id="toc_9">Listing Details</h3>
 
 <pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getListing()-&gt;details(<span class="variable">$listingSource</span>, <span class="variable">$listingType</span>, <span class="variable">$listingId</span>);
 </code></pre>
@@ -170,7 +170,7 @@
 }
 </code></pre>
 
-<h3 id="toc_12">4. Images</h3>
+<h3 id="toc_12">Images</h3>
 
 <pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getListing()-&gt;imageUrl(<span class="variable">$listingSource</span>, <span class="variable">$listingType</span>, <span class="variable">$listingId</span>, <span class="variable">$photoId</span>, <span class="variable">$width</span> = <span class="keyword">null</span>, <span class="variable">$height</span> = <span class="keyword">null</span>);
 </code></pre>
@@ -199,9 +199,30 @@
 
 <p>A URL for the image specified</p>
 
+<h3 id="toc_15">Sorting</h3>
+
+<pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getListing()
+</code></pre>
+
+<p><strong>-&gt;setSortBy(&quot;providedBy&quot;)-&gt;setReverseSort(true)</strong></p>
+
+<pre><code class="php">-&gt;searchByKeyword(<span class="variable">$preparedKeywords</span>);
+</code></pre>
+
+<p>By default listings will be sorted by the price from low to high.  If you want to change the defaults, you can modify these lines.</p>
+
+<p>private $sortBy = &quot;rawListPrice&quot;;</p>
+
+<p>private $reverseSort = false;</p>
+
+<p>If you want to sort listings manually within any other portion of the app, you can use the setSortBy and setReverseSort methods as in the following syntax.</p>
+
+<pre><code class="php"><span class="variable">$listings</span> = <span class="variable">$getRets</span>-&gt;getListing()-&gt;setSortBy(<span class="string">"providedBy"</span>)-&gt;setReverseSort(<span class="keyword">true</span>)-&gt;searchByKeyword(<span class="variable">$preparedKeywords</span>);
+</code></pre>
+
 <hr>
 
-<h2 id="toc_15">RETSListing</h2>
+<h2 id="toc_16">RETSListing</h2>
 
 <pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getRETSListing();
 </code></pre>
@@ -224,7 +245,7 @@
 
 <p><strong><em>Special Note</em></strong> - All of the same functions used for fetching data from the cached data are applicable to this API controller as well, as the exist with the same signatures, only they will go directly to the RETS server. </p>
 
-<h3 id="toc_16">5. Execute DMQL</h3>
+<h3 id="toc_17">Execute DMQL</h3>
 
 <pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getRETSListing()-&gt;executeDMQL(<span class="variable">$query</span>, <span class="variable">$feedName</span>, <span class="variable">$listingType</span>);
 </code></pre>
@@ -233,7 +254,7 @@
 
 <p><strong><em>Special Note</em></strong> - These results will not be returned in a translated fashion similiar to the other listing detail searches.  These results are in the format as returned from the MLS RETS server.  If you wish to retrieve listings in a <strong>translated</strong> format use getListingsByDMQL.</p>
 
-<h4 id="toc_17">Parameters</h4>
+<h4 id="toc_18">Parameters</h4>
 
 <p><strong><em>query</em></strong> - The DMQL to be executed against the MLS RETS server</p>
 
@@ -241,7 +262,7 @@
 
 <p><strong><em>listingType</em></strong> - A string representation of the listing type such as residential, land etc.. (see FeedsModels.Models.enumListingType)</p>
 
-<h4 id="toc_18">Returns</h4>
+<h4 id="toc_19">Returns</h4>
 
 <p>An enveloped response with the success or failure of the query, as well as the raw serialized results that were fetched.  These serialized results will be different for each feedName and listingType.</p>
 
@@ -257,14 +278,14 @@
 }
 </code></pre>
 
-<h3 id="toc_19">6. Get Translated Listings by DMQL</h3>
+<h3 id="toc_20">Get Translated Listings by DMQL</h3>
 
 <pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getRETSListing()-&gt;getListingsByDMQL(<span class="variable">$query</span>, <span class="variable">$feedName</span>, <span class="variable">$listingType</span>);
 </code></pre>
 
 <p>This is a powerful function that will execute raw DMQL against the RETS MLS server and will return the results as a serialized object.  It is similar to executeDMQL, however this function will <strong>translate</strong> data to be in the same format as returned by other methods that retrieve listing details.</p>
 
-<h4 id="toc_20">Parameters</h4>
+<h4 id="toc_21">Parameters</h4>
 
 <p><strong><em>query</em></strong> - The DMQL to be executed against the MLS RETS server</p>
 
@@ -272,7 +293,7 @@
 
 <p><strong><em>listingType</em></strong> - A string representation of the listing type such as residential, land etc.. (see FeedsModels.Models.enumListingType)</p>
 
-<h4 id="toc_21">Returns</h4>
+<h4 id="toc_22">Returns</h4>
 
 <p>An enveloped response with the success or failure of the query, as well as the raw serialized results that were fetched.</p>
 
@@ -309,7 +330,7 @@
 
 <hr>
 
-<h2 id="toc_22">Geocoding</h2>
+<h2 id="toc_23">Geocoding</h2>
 
 <pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getGeocoding();
 </code></pre>
@@ -318,14 +339,14 @@
 
 <p>If you provide a google geocode key to be associated with your account, you can use these methods.</p>
 
-<h3 id="toc_23">7. Parse Google Results</h3>
+<h3 id="toc_24">Parse Google Results</h3>
 
 <pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getGeocoding()-&gt;parseGoogleResults(<span class="variable">$googleResults</span>);
 </code></pre>
 
 <p>This function will parse the results returned from googles service and translate them into a consistent format more suitable for searching the listing data.</p>
 
-<h4 id="toc_24">Parameters</h4>
+<h4 id="toc_25">Parameters</h4>
 
 <p><strong><em>googleResults</em></strong> - Results from Google&#39;s geocoder.geocode</p>
 
@@ -368,7 +389,7 @@
 ]
 </code></pre>
 
-<h4 id="toc_25">Returns</h4>
+<h4 id="toc_26">Returns</h4>
 
 <p>Data translated as <strong>AddressDetail</strong>&#39;s.</p>
 
@@ -389,18 +410,18 @@
 ]
 </code></pre>
 
-<h3 id="toc_26">8. Parse Google Results</h3>
+<h3 id="toc_27">Parse Google Results</h3>
 
 <pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getGeocoding()-&gt;googleGeocode(<span class="variable">$address</span>);
 </code></pre>
 
 <p>This function will take a keyword and run it through Google&#39;s geocoding service and return the translated results.</p>
 
-<h4 id="toc_27">Parameters</h4>
+<h4 id="toc_28">Parameters</h4>
 
 <p><strong><em>address</em></strong> - A free form text to geocode (The expectation is that this is a possible address)</p>
 
-<h4 id="toc_28">Returns</h4>
+<h4 id="toc_29">Returns</h4>
 
 <p>Data translated as <strong>AddressDetail</strong>&#39;s.</p>
 
@@ -423,7 +444,7 @@
 
 <hr>
 
-<h1 id="toc_29">Further Reading</h1>
+<h1 id="toc_30">Further Reading</h1>
 
 <p>More information on the API itself can be found at the Swagger UI (<a href="http://getrets.net/swagger/">http://getrets.net/swagger/</a>). </p>
 
