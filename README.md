@@ -25,7 +25,7 @@ This is the main entry point for retrieving **cached** listings.  Using this ent
 **Disadvantages**
 * Data is not 100% live *(We are constantly polling the MLS for new data but it could be an hour or so before new listings show up, and we refresh each listing every 24 hours)*
 
-### 1. SearchByKeyword
+### SearchByKeyword
 ```php
 (new GetRETS($customerKey))->getListing()->searchByKeyword($preparedKeywords);
 ```
@@ -60,7 +60,7 @@ An array of **CondensedListing**'s
 ]
 ```
 
-### 2. Search
+### Search
 ```php
 (new GetRETS($customerKey))->getListing()->search($keywords, $maxPrice, $minPrice, $includeResidential, $includeLand, $includeCommercial);
 ```
@@ -107,7 +107,7 @@ An array of **CondensedListing**'s
 ]
 ```
 
-### 3. Listing Details
+### Listing Details
 ```php
 (new GetRETS($customerKey))->getListing()->details($listingSource, $listingType, $listingId);
 ```
@@ -149,7 +149,7 @@ A single **Listing**
 }
 ```
 
-### 4. Images
+### Images
 ```php
 (new GetRETS($customerKey))->getListing()->imageUrl($listingSource, $listingType, $listingId, $photoId, $width = null, $height = null);
 ```
@@ -177,6 +177,27 @@ Also, fetching the first photo ($photoId) is a suggested strategy for displaying
 
 A URL for the image specified
 
+### Sorting
+```php
+(new GetRETS($customerKey))->getListing()
+```
+**->setSortBy("providedBy")->setReverseSort(true)**
+```php
+->searchByKeyword($preparedKeywords);
+```
+
+By default listings will be sorted by the price from low to high.  If you want to change the defaults, you can modify these lines.
+
+private $sortBy = "rawListPrice";
+
+private $reverseSort = false;
+
+If you want to sort listings manually within any other portion of the app, you can use the setSortBy and setReverseSort methods as in the following syntax.
+
+```php
+$listings = $getRets->getListing()->setSortBy("providedBy")->setReverseSort(true)->searchByKeyword($preparedKeywords);
+```
+
 ***
 ## RETSListing
 ```php
@@ -194,7 +215,7 @@ This is the main entry point for retrieving **live** listing data from the MLS v
 
 ***Special Note*** - All of the same functions used for fetching data from the cached data are applicable to this API controller as well, as the exist with the same signatures, only they will go directly to the RETS server. 
 
-### 5. Execute DMQL
+### Execute DMQL
 ```php
 (new GetRETS($customerKey))->getRETSListing()->executeDMQL($query, $feedName, $listingType);
 ```
@@ -227,7 +248,7 @@ An enveloped response with the success or failure of the query, as well as the r
 }
 ```
 
-### 6. Get Translated Listings by DMQL
+### Get Translated Listings by DMQL
 ```php
 (new GetRETS($customerKey))->getRETSListing()->getListingsByDMQL($query, $feedName, $listingType);
 ```
@@ -286,7 +307,7 @@ This controller is a planned area of growth to provide more advanced geo-spatial
 
 If you provide a google geocode key to be associated with your account, you can use these methods.
 
-### 7. Parse Google Results
+### Parse Google Results
 ```php
 (new GetRETS($customerKey))->getGeocoding()->parseGoogleResults($googleResults);
 ```
@@ -358,7 +379,7 @@ Data translated as **AddressDetail**'s.
 ]
 ```
 
-### 8. Parse Google Results
+### Parse Google Results
 ```php
 (new GetRETS($customerKey))->getGeocoding()->googleGeocode($address);
 ```
