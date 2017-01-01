@@ -1,0 +1,431 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+   <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+   <style type="text/css">
+   /*CSS stylesheet is based on killwing's flavored markdown style:https://gist.github.com/2937864*/body{    margin: 0 auto;    font: 13px/1.231 Helvetica, Arial, sans-serif;    color: #444444;    line-height: 1;    max-width: 960px;    padding: 5px;}h1, h2, h3, h4 {    color: #111111;    font-weight: 400;}h1, h2, h3, h4, h5, p {    margin-bottom: 16px;    padding: 0;}h1 {    font-size: 28px;}h2 {    font-size: 22px;    margin: 20px 0 6px;}h3 {    font-size: 21px;}h4 {    font-size: 18px;}h5 {    font-size: 16px;}a {    color: #0099ff;    margin: 0;    padding: 0;    vertical-align: baseline;}a:link,a:visited{ text-decoration:none;}a:hover{ text-decoration:underline;}ul, ol {    padding: 0;    margin: 0;}li {    line-height: 24px;    margin-left: 44px;}li ul, li ul {    margin-left: 24px;}ul, ol {    font-size: 14px;    line-height: 20px;    max-width: 540px;}p {    font-size: 14px;    line-height: 20px;    max-width: 540px;    margin-top: 3px;}pre {    padding: 0px 4px;    max-width: 800px;    white-space: pre-wrap;    font-family: Consolas, Monaco, Andale Mono, monospace;    line-height: 1.5;    font-size: 13px;    border: 1px solid #ddd;    background-color: #f7f7f7;    border-radius: 3px;}code {    font-family: Consolas, Monaco, Andale Mono, monospace;    line-height: 1.5;    font-size: 13px;    border: 1px solid #ddd;    background-color: #f7f7f7;    border-radius: 3px;}pre code {    border: 0px;}aside {    display: block;    float: right;    width: 390px;}blockquote {    border-left:.5em solid #40AA53;    padding: 0 2em;    margin-left:0;    max-width: 476px;}blockquote  cite {    font-size:14px;    line-height:20px;    color:#bfbfbf;}blockquote cite:before {    content: '\2014 \00A0';}blockquote p {      color: #666;    max-width: 460px;}hr {    height: 1px;    border: none;    border-top: 1px dashed #0066CC}button,input,select,textarea {  font-size: 100%;  margin: 0;  vertical-align: baseline;  *vertical-align: middle;}button, input {  line-height: normal;  *overflow: visible;}button::-moz-focus-inner, input::-moz-focus-inner {  border: 0;  padding: 0;}button,input[type="button"],input[type="reset"],input[type="submit"] {  cursor: pointer;  -webkit-appearance: button;}input[type=checkbox], input[type=radio] {  cursor: pointer;}/* override default chrome & firefox settings */input:not([type="image"]), textarea {  -webkit-box-sizing: content-box;  -moz-box-sizing: content-box;  box-sizing: content-box;}input[type="search"] {  -webkit-appearance: textfield;  -webkit-box-sizing: content-box;  -moz-box-sizing: content-box;  box-sizing: content-box;}input[type="search"]::-webkit-search-decoration {  -webkit-appearance: none;}label,input,select,textarea {  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;  font-size: 13px;  font-weight: normal;  line-height: normal;  margin-bottom: 18px;}input[type=checkbox], input[type=radio] {  cursor: pointer;  margin-bottom: 0;}input[type=text],input[type=password],textarea,select {  display: inline-block;  width: 210px;  padding: 4px;  font-size: 13px;  font-weight: normal;  line-height: 18px;  height: 18px;  color: #808080;  border: 1px solid #ccc;  -webkit-border-radius: 3px;  -moz-border-radius: 3px;  border-radius: 3px;}select, input[type=file] {  height: 27px;  line-height: 27px;}textarea {  height: auto;}/* grey out placeholders */:-moz-placeholder {  color: #bfbfbf;}::-webkit-input-placeholder {  color: #bfbfbf;}input[type=text],input[type=password],select,textarea {  -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;  -moz-transition: border linear 0.2s, box-shadow linear 0.2s;  transition: border linear 0.2s, box-shadow linear 0.2s;  -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);  -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);}input[type=text]:focus, input[type=password]:focus, textarea:focus {  outline: none;  border-color: rgba(82, 168, 236, 0.8);  -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);  -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);}/* buttons */button {  display: inline-block;  padding: 4px 14px;  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;  font-size: 13px;  line-height: 18px;  -webkit-border-radius: 4px;  -moz-border-radius: 4px;  border-radius: 4px;  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);  -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);  background-color: #0064cd;  background-repeat: repeat-x;  background-image: -khtml-gradient(linear, left top, left bottom, from(#049cdb), to(#0064cd));  background-image: -moz-linear-gradient(top, #049cdb, #0064cd);  background-image: -ms-linear-gradient(top, #049cdb, #0064cd);  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #049cdb), color-stop(100%, #0064cd));  background-image: -webkit-linear-gradient(top, #049cdb, #0064cd);  background-image: -o-linear-gradient(top, #049cdb, #0064cd);  background-image: linear-gradient(top, #049cdb, #0064cd);  color: #fff;  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);  border: 1px solid #004b9a;  border-bottom-color: #003f81;  -webkit-transition: 0.1s linear all;  -moz-transition: 0.1s linear all;  transition: 0.1s linear all;  border-color: #0064cd #0064cd #003f81;  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);}button:hover {  color: #fff;  background-position: 0 -15px;  text-decoration: none;}button:active {  -webkit-box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);  -moz-box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);  box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);}button::-moz-focus-inner {  padding: 0;  border: 0;}/* table  */table {    border-spacing: 0;    border: 1px solid #ccc;}td, th{    border: 1px solid #ccc;    padding: 5px;}/* code syntax highlight.Documentation: http://www.mdcharm.com/documentation/code_syntax_highlighting.html#custom_your_own */pre .literal,pre .comment,pre .template_comment,pre .diff .header,pre .javadoc {    color: #008000;}pre .keyword,pre .css .rule .keyword,pre .winutils,pre .javascript .title,pre .nginx .title,pre .subst,pre .request,pre .status {    color: #0000FF;    font-weight: bold}pre .number,pre .hexcolor,pre .python .decorator,pre .ruby .constant {    color: #0000FF;}pre .string,pre .tag .value,pre .phpdoc,pre .tex .formula {    color: #D14}pre .title,pre .id {    color: #900;    font-weight: bold}pre .javascript .title,pre .lisp .title,pre .clojure .title,pre .subst {    font-weight: normal}pre .class .title,pre .haskell .type,pre .vhdl .literal,pre .tex .command {    color: #458;    font-weight: bold}pre .tag,pre .tag .title,pre .rules .property,pre .django .tag .keyword {    color: #000080;    font-weight: normal}pre .attribute,pre .variable,pre .lisp .body {    color: #008080}pre .regexp {    color: #009926}pre .class {    color: #458;    font-weight: bold}pre .symbol,pre .ruby .symbol .string,pre .lisp .keyword,pre .tex .special,pre .prompt {    color: #990073}pre .built_in,pre .lisp .title,pre .clojure .built_in {    color: #0086b3}pre .preprocessor,pre .pi,pre .doctype,pre .shebang,pre .cdata {    color: #999;    font-weight: bold}pre .deletion {    background: #fdd}pre .addition {    background: #dfd}pre .diff .change {    background: #0086b3}pre .chunk {    color: #aaa}pre .markdown .header {    color: #800;    font-weight: bold;}pre .markdown .blockquote {    color: #888;}pre .markdown .link_label {    color: #88F;}pre .markdown .strong {    font-weight: bold;}pre .markdown .emphasis {    font-style: italic;}
+   </style>
+   
+   
+</head>
+<body>
+    <h1 id="toc_0">getrets-php-sdk</h1>
+
+<p>A simple &quot;no framework&quot; php wrapper for the GetRETS&reg; API from timitek (<a href="http://www.timitek.com">http://www.timitek.com</a>).</p>
+
+<h1 id="toc_1">How To Use</h1>
+
+<pre><code class="php"><span class="keyword">include</span> <span class="string">"GetRETS.php"</span>;
+<span class="variable">$getRets</span> = <span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>);
+<span class="variable">$listings</span> = <span class="variable">$getRets</span>-&gt;getListing()-&gt;searchByKeyword(<span class="variable">$preparedKeywords</span>);
+</code></pre>
+
+<hr>
+
+<h2 id="toc_2">Listing</h2>
+
+<pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getListing();
+</code></pre>
+
+<p>This is the main entry point for retrieving <strong>cached</strong> listings.  Using this entry point will pull listing data that has been <strong>pre-fetched</strong> from your MLS.  </p>
+
+<p><strong>Advantages</strong></p>
+
+<ul>
+<li>Faster retrieval of data <em>(The retrieval of data does not have to be negotiated and translated with your MLS RETS provider)</em></li>
+<li>More advanced searching <em>(Since it&#39;s pre-fetched data we aren&#39;t limited to DMQL queries or other limitations by the RETS provider)</em></li>
+<li>Works even when the MLS is down for maintenance</li>
+</ul>
+
+<p><strong>Disadvantages</strong></p>
+
+<ul>
+<li>Data is not 100% live <em>(We are constantly polling the MLS for new data but it could be an hour or so before new listings show up, and we refresh each listing every 24 hours)</em></li>
+</ul>
+
+<h3 id="toc_3">1. SearchByKeyword</h3>
+
+<pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getListing()-&gt;searchByKeyword(<span class="variable">$preparedKeywords</span>);
+</code></pre>
+
+<p>A simple search that will retrieve listings by a keyword search.</p>
+
+<h4 id="toc_4">Parameters</h4>
+
+<p><strong><em>keyword</em></strong> - Keywords to search on</p>
+
+<h4 id="toc_5">Returns</h4>
+
+<p>An array of <strong>CondensedListing</strong>&#39;s</p>
+
+<pre><code>[
+  {
+    &quot;id&quot;: &quot;string&quot;,
+    &quot;listingSourceURLSlug&quot;: &quot;string&quot;,
+    &quot;listingTypeURLSlug&quot;: &quot;string&quot;,
+    &quot;listingID&quot;: &quot;string&quot;,
+    &quot;listingSource&quot;: 1,
+    &quot;listingType&quot;: 1,
+    &quot;address&quot;: &quot;string&quot;,
+    &quot;baths&quot;: 0,
+    &quot;beds&quot;: 0,
+    &quot;listPrice&quot;: &quot;string&quot;,
+    &quot;rawListPrice&quot;: 0,
+    &quot;providedBy&quot;: &quot;string&quot;,
+    &quot;squareFeet&quot;: 0,
+    &quot;lot&quot;: &quot;string&quot;,
+    &quot;acres&quot;: &quot;string&quot;
+  }
+]
+</code></pre>
+
+<h3 id="toc_6">2. Search</h3>
+
+<pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getListing()-&gt;search(<span class="variable">$keywords</span>, <span class="variable">$maxPrice</span>, <span class="variable">$minPrice</span>, <span class="variable">$includeResidential</span>, <span class="variable">$includeLand</span>, <span class="variable">$includeCommercial</span>);
+</code></pre>
+
+<p>A more advanced search that retrieves listings constrained by the optional parameters.</p>
+
+<h4 id="toc_7">Parameters</h4>
+
+<p><strong><em>keyword</em></strong> - Keywords to search on</p>
+
+<p><strong><em>maxPrice</em></strong> - <em>(optional)</em> The maximum listing price</p>
+
+<p><strong><em>minPrice</em></strong> - <em>(optional)</em> The minimum listing price</p>
+
+<p><strong><em>includeResidential</em></strong> - <em>(optional)</em> Include residential listings</p>
+
+<p><strong><em>includeLand</em></strong> - <em>(optional)</em> Include land listings</p>
+
+<p><strong><em>includeCommercial</em></strong> - <em>(optional)</em> Include commercial listings</p>
+
+<p><em>Note</em> - If you don&#39;t set any of the <em>include</em> parameters, all will be assumed as set.</p>
+
+<h4 id="toc_8">Returns</h4>
+
+<p>An array of <strong>CondensedListing</strong>&#39;s</p>
+
+<pre><code>[
+  {
+    &quot;id&quot;: &quot;string&quot;,
+    &quot;listingSourceURLSlug&quot;: &quot;string&quot;,
+    &quot;listingTypeURLSlug&quot;: &quot;string&quot;,
+    &quot;listingID&quot;: &quot;string&quot;,
+    &quot;listingSource&quot;: 1,
+    &quot;listingType&quot;: 1,
+    &quot;address&quot;: &quot;string&quot;,
+    &quot;baths&quot;: 0,
+    &quot;beds&quot;: 0,
+    &quot;listPrice&quot;: &quot;string&quot;,
+    &quot;rawListPrice&quot;: 0,
+    &quot;providedBy&quot;: &quot;string&quot;,
+    &quot;squareFeet&quot;: 0,
+    &quot;lot&quot;: &quot;string&quot;,
+    &quot;acres&quot;: &quot;string&quot;
+  }
+]
+</code></pre>
+
+<h3 id="toc_9">3. Listing Details</h3>
+
+<pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getListing()-&gt;details(<span class="variable">$listingSource</span>, <span class="variable">$listingType</span>, <span class="variable">$listingId</span>);
+</code></pre>
+
+<p>Retrieves the more specific / non condensed details for a listing.  You will typically use the values returned from search functions as the parameters.</p>
+
+<h4 id="toc_10">Parameters</h4>
+
+<p><strong><em>listingSource</em></strong> - A string representation of the MLS listing source (see FeedsModels.Models.enumListingSource)</p>
+
+<p><strong><em>listingType</em></strong> - A string representation of the listing type such as residential, land etc.. (see FeedsModels.Models.enumListingType)</p>
+
+<p><strong><em>listingId</em></strong> - The unique ID for the listing to retrieve the listing for</p>
+
+<h4 id="toc_11">Returns</h4>
+
+<p>A single <strong>Listing</strong></p>
+
+<pre><code>{
+  &quot;description&quot;: &quot;string&quot;,
+  &quot;features&quot;: [
+    &quot;string&quot;
+  ],
+  &quot;photoCount&quot;: 0,
+  &quot;id&quot;: &quot;string&quot;,
+  &quot;listingSourceURLSlug&quot;: &quot;string&quot;,
+  &quot;listingTypeURLSlug&quot;: &quot;string&quot;,
+  &quot;listingID&quot;: &quot;string&quot;,
+  &quot;listingSource&quot;: 1,
+  &quot;listingType&quot;: 1,
+  &quot;address&quot;: &quot;string&quot;,
+  &quot;baths&quot;: 0,
+  &quot;beds&quot;: 0,
+  &quot;listPrice&quot;: &quot;string&quot;,
+  &quot;rawListPrice&quot;: 0,
+  &quot;providedBy&quot;: &quot;string&quot;,
+  &quot;squareFeet&quot;: 0,
+  &quot;lot&quot;: &quot;string&quot;,
+  &quot;acres&quot;: &quot;string&quot;
+}
+</code></pre>
+
+<h3 id="toc_12">4. Images</h3>
+
+<pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getListing()-&gt;imageUrl(<span class="variable">$listingSource</span>, <span class="variable">$listingType</span>, <span class="variable">$listingId</span>, <span class="variable">$photoId</span>, <span class="variable">$width</span> = <span class="keyword">null</span>, <span class="variable">$height</span> = <span class="keyword">null</span>);
+</code></pre>
+
+<p>Retrieves an image(s) associated with a specific listing.</p>
+
+<p><strong><em>Special Note</em></strong> - While the width and height parameters are optional, using them to specify an appropriate image size will increase the speed in which your site renders by lowering the need to download a full size image.</p>
+
+<p>Also, fetching the first photo ($photoId) is a suggested strategy for displaying a thumbnail image.</p>
+
+<h4 id="toc_13">Parameters</h4>
+
+<p><strong><em>listingSource</em></strong> - A string representation of the MLS listing source (see FeedsModels.Models.enumListingSource)</p>
+
+<p><strong><em>listingType</em></strong> - A string representation of the listing type such as residential, land etc.. (see FeedsModels.Models.enumListingType)</p>
+
+<p><strong><em>listingId</em></strong> - The unique ID for the listing to retrieve the listing for</p>
+
+<p><strong><em>photoId</em></strong> - A zero based index for the photo to retrieve <em>(see the photoCount that is returned in the listing details)</em>.</p>
+
+<p><strong><em>width</em></strong> - The width to be used for resizing the photo</p>
+
+<p><strong><em>height</em></strong> - The height to be used for resizing the photo</p>
+
+<h4 id="toc_14">Returns</h4>
+
+<p>A URL for the image specified</p>
+
+<hr>
+
+<h2 id="toc_15">RETSListing</h2>
+
+<pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getRETSListing();
+</code></pre>
+
+<p>This is the main entry point for retrieving <strong>live</strong> listing data from the MLS via RETS.</p>
+
+<p><strong>Advantages</strong></p>
+
+<ul>
+<li>The data is queried immediately from the MLS RETS server</li>
+</ul>
+
+<p><strong>Disadvantages</strong></p>
+
+<ul>
+<li>A bit slower than the cached method. <em>(The data has be translated to DMQL and retreived from a 3rd party server)</em>.</li>
+<li>Keyword searches have less <em>&quot;fuzzy logic&quot;</em> applied to them as we are limited to only searching via the available DMQL classes as defined by the MLS.</li>
+<li>If your MLS is down for maintenance, results can not be retrieved.</li>
+</ul>
+
+<p><strong><em>Special Note</em></strong> - All of the same functions used for fetching data from the cached data are applicable to this API controller as well, as the exist with the same signatures, only they will go directly to the RETS server. </p>
+
+<h3 id="toc_16">5. Execute DMQL</h3>
+
+<pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getRETSListing()-&gt;executeDMQL(<span class="variable">$query</span>, <span class="variable">$feedName</span>, <span class="variable">$listingType</span>);
+</code></pre>
+
+<p>This is a powerful function that will execute raw DMQL against the RETS MLS server and will return the results as a serialized object.</p>
+
+<p><strong><em>Special Note</em></strong> - These results will not be returned in a translated fashion similiar to the other listing detail searches.  These results are in the format as returned from the MLS RETS server.  If you wish to retrieve listings in a <strong>translated</strong> format use getListingsByDMQL.</p>
+
+<h4 id="toc_17">Parameters</h4>
+
+<p><strong><em>query</em></strong> - The DMQL to be executed against the MLS RETS server</p>
+
+<p><strong><em>feedName</em></strong> - The name of the feed to run the query against</p>
+
+<p><strong><em>listingType</em></strong> - A string representation of the listing type such as residential, land etc.. (see FeedsModels.Models.enumListingType)</p>
+
+<h4 id="toc_18">Returns</h4>
+
+<p>An enveloped response with the success or failure of the query, as well as the raw serialized results that were fetched.  These serialized results will be different for each feedName and listingType.</p>
+
+<pre><code>{
+  &quot;success&quot;: true,
+  &quot;code&quot;: 0,
+  &quot;message&quot;: &quot;string&quot;,
+  &quot;data&quot;: [
+    {
+      &quot;className&quot;: &quot;string&quot;
+    }
+  ]
+}
+</code></pre>
+
+<h3 id="toc_19">6. Get Translated Listings by DMQL</h3>
+
+<pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getRETSListing()-&gt;getListingsByDMQL(<span class="variable">$query</span>, <span class="variable">$feedName</span>, <span class="variable">$listingType</span>);
+</code></pre>
+
+<p>This is a powerful function that will execute raw DMQL against the RETS MLS server and will return the results as a serialized object.  It is similar to executeDMQL, however this function will <strong>translate</strong> data to be in the same format as returned by other methods that retrieve listing details.</p>
+
+<h4 id="toc_20">Parameters</h4>
+
+<p><strong><em>query</em></strong> - The DMQL to be executed against the MLS RETS server</p>
+
+<p><strong><em>feedName</em></strong> - The name of the feed to run the query against</p>
+
+<p><strong><em>listingType</em></strong> - A string representation of the listing type such as residential, land etc.. (see FeedsModels.Models.enumListingType)</p>
+
+<h4 id="toc_21">Returns</h4>
+
+<p>An enveloped response with the success or failure of the query, as well as the raw serialized results that were fetched.</p>
+
+<pre><code>{
+  &quot;success&quot;: true,
+  &quot;code&quot;: 0,
+  &quot;message&quot;: &quot;string&quot;,
+  &quot;data&quot;: [
+    {
+      &quot;description&quot;: &quot;string&quot;,
+      &quot;features&quot;: [
+        &quot;string&quot;
+      ],
+      &quot;photoCount&quot;: 0,
+      &quot;id&quot;: &quot;string&quot;,
+      &quot;listingSourceURLSlug&quot;: &quot;string&quot;,
+      &quot;listingTypeURLSlug&quot;: &quot;string&quot;,
+      &quot;listingID&quot;: &quot;string&quot;,
+      &quot;listingSource&quot;: 1,
+      &quot;listingType&quot;: 1,
+      &quot;address&quot;: &quot;string&quot;,
+      &quot;baths&quot;: 0,
+      &quot;beds&quot;: 0,
+      &quot;listPrice&quot;: &quot;string&quot;,
+      &quot;rawListPrice&quot;: 0,
+      &quot;providedBy&quot;: &quot;string&quot;,
+      &quot;squareFeet&quot;: 0,
+      &quot;lot&quot;: &quot;string&quot;,
+      &quot;acres&quot;: &quot;string&quot;
+    }
+  ]
+}
+</code></pre>
+
+<hr>
+
+<h2 id="toc_22">Geocoding</h2>
+
+<pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getGeocoding();
+</code></pre>
+
+<p>This controller is a planned area of growth to provide more advanced geo-spatial style searching for listing data.  For the time being, it is used for parsing keywords into more geocoded data to be used for searching.</p>
+
+<p>If you provide a google geocode key to be associated with your account, you can use these methods.</p>
+
+<h3 id="toc_23">7. Parse Google Results</h3>
+
+<pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getGeocoding()-&gt;parseGoogleResults(<span class="variable">$googleResults</span>);
+</code></pre>
+
+<p>This function will parse the results returned from googles service and translate them into a consistent format more suitable for searching the listing data.</p>
+
+<h4 id="toc_24">Parameters</h4>
+
+<p><strong><em>googleResults</em></strong> - Results from Google&#39;s geocoder.geocode</p>
+
+<pre><code>[
+  {
+    &quot;address_components&quot;: [
+      {
+        &quot;long_name&quot;: &quot;string&quot;,
+        &quot;short_name&quot;: &quot;string&quot;,
+        &quot;types&quot;: [
+          &quot;string&quot;
+        ]
+      }
+    ],
+    &quot;formatted_address&quot;: &quot;string&quot;,
+    &quot;geometry&quot;: {
+      &quot;bounds&quot;: {
+        &quot;south&quot;: 0,
+        &quot;west&quot;: 0,
+        &quot;north&quot;: 0,
+        &quot;east&quot;: 0
+      },
+      &quot;location&quot;: {
+        &quot;lat&quot;: 0,
+        &quot;lng&quot;: 0
+      },
+      &quot;location_type&quot;: &quot;string&quot;,
+      &quot;viewport&quot;: {
+        &quot;south&quot;: 0,
+        &quot;west&quot;: 0,
+        &quot;north&quot;: 0,
+        &quot;east&quot;: 0
+      }
+    },
+    &quot;place_id&quot;: &quot;string&quot;,
+    &quot;types&quot;: [
+      &quot;string&quot;
+    ]
+  }
+]
+</code></pre>
+
+<h4 id="toc_25">Returns</h4>
+
+<p>Data translated as <strong>AddressDetail</strong>&#39;s.</p>
+
+<pre><code>[
+  {
+    &quot;streetNumber&quot;: &quot;string&quot;,
+    &quot;street&quot;: &quot;string&quot;,
+    &quot;city&quot;: &quot;string&quot;,
+    &quot;county&quot;: &quot;string&quot;,
+    &quot;state&quot;: &quot;string&quot;,
+    &quot;stateAbbreviation&quot;: &quot;string&quot;,
+    &quot;country&quot;: &quot;string&quot;,
+    &quot;postalCode&quot;: &quot;string&quot;,
+    &quot;latitude&quot;: 0,
+    &quot;longitude&quot;: 0,
+    &quot;formattedAddress&quot;: &quot;string&quot;
+  }
+]
+</code></pre>
+
+<h3 id="toc_26">8. Parse Google Results</h3>
+
+<pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getGeocoding()-&gt;googleGeocode(<span class="variable">$address</span>);
+</code></pre>
+
+<p>This function will take a keyword and run it through Google&#39;s geocoding service and return the translated results.</p>
+
+<h4 id="toc_27">Parameters</h4>
+
+<p><strong><em>address</em></strong> - A free form text to geocode (The expectation is that this is a possible address)</p>
+
+<h4 id="toc_28">Returns</h4>
+
+<p>Data translated as <strong>AddressDetail</strong>&#39;s.</p>
+
+<pre><code>[
+  {
+    &quot;streetNumber&quot;: &quot;string&quot;,
+    &quot;street&quot;: &quot;string&quot;,
+    &quot;city&quot;: &quot;string&quot;,
+    &quot;county&quot;: &quot;string&quot;,
+    &quot;state&quot;: &quot;string&quot;,
+    &quot;stateAbbreviation&quot;: &quot;string&quot;,
+    &quot;country&quot;: &quot;string&quot;,
+    &quot;postalCode&quot;: &quot;string&quot;,
+    &quot;latitude&quot;: 0,
+    &quot;longitude&quot;: 0,
+    &quot;formattedAddress&quot;: &quot;string&quot;
+  }
+]
+</code></pre>
+
+<hr>
+
+<h1 id="toc_29">Further Reading</h1>
+
+<p>More information on the API itself can be found at the Swagger UI (<a href="http://getrets.net/swagger/">http://getrets.net/swagger/</a>). </p>
+
+</body>
+</html>
