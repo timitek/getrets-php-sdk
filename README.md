@@ -2,6 +2,17 @@
 
 A simple "no framework" php wrapper for the GetRETS&reg; API from timitek (<http://www.timitek.com>).
 
+***
+
+# Table of Contents
+1. [How To Use](#toc_2)
+2. [Listing](#toc_3)
+3. [RETSListing](#toc_16)
+4. [Geocoding](#toc_35)
+5. [Helper Functions](#toc_42)
+6. [Further Reading](#toc_44)
+
+***
 
 # How To Use
 ```php
@@ -11,7 +22,12 @@ $listings = $getRets->getListing()->searchByKeyword($preparedKeywords);
 ```
 
 ***
-## Listing
+
+# Listing
+> The main controller for working with the listings using the pre-fetched / cached data.
+
+[Swagger Documentation](http://getrets.net/swagger/ui/index#/Listing "")
+
 ```php
 (new GetRETS($customerKey))->getListing();
 ```
@@ -25,17 +41,23 @@ This is the main entry point for retrieving **cached** listings.  Using this ent
 **Disadvantages**
 * Data is not 100% live *(We are constantly polling the MLS for new data but it could be an hour or so before new listings show up, and we refresh each listing every 24 hours)*
 
-### SearchByKeyword
+***
+
+## searchByKeyword
+> Search for listings by keyword
+
+[Swagger Documentation](http://getrets.net/swagger/ui/index#!/Listing/Listing_SearchByKeyword "")
+
 ```php
 (new GetRETS($customerKey))->getListing()->searchByKeyword($preparedKeywords);
 ```
 A simple search that will retrieve listings by a keyword search.
 
-#### Parameters
+### Parameters
 
 ***keyword*** - Keywords to search on
 
-#### Returns
+### Returns
 
 An array of **CondensedListing**'s
 ```
@@ -60,13 +82,19 @@ An array of **CondensedListing**'s
 ]
 ```
 
-### Search
+***
+
+## search
+> Advanced search
+
+[Swagger Documentation](http://getrets.net/swagger/ui/index#!/Listing/Listing_Search "")
+
 ```php
 (new GetRETS($customerKey))->getListing()->search($keywords, $maxPrice, $minPrice, $includeResidential, $includeLand, $includeCommercial);
 ```
 A more advanced search that retrieves listings constrained by the optional parameters.
 
-#### Parameters
+### Parameters
 
 ***keyword*** - Keywords to search on
 
@@ -82,7 +110,7 @@ A more advanced search that retrieves listings constrained by the optional param
 
 *Note* - If you don't set any of the *include* parameters, all will be assumed as set.
 
-#### Returns
+### Returns
 
 An array of **CondensedListing**'s
 ```
@@ -107,13 +135,19 @@ An array of **CondensedListing**'s
 ]
 ```
 
-### Listing Details
+***
+
+## details
+> Get details for a specific listing
+
+[Swagger Documentation](http://getrets.net/swagger/ui/index#!/Listing/Listing_GetListingDetails "")
+
 ```php
 (new GetRETS($customerKey))->getListing()->details($listingSource, $listingType, $listingId);
 ```
 Retrieves the more specific / non condensed details for a listing.  You will typically use the values returned from search functions as the parameters.
 
-#### Parameters
+### Parameters
 
 ***listingSource*** - A string representation of the MLS listing source (see FeedsModels.Models.enumListingSource)
 
@@ -121,7 +155,7 @@ Retrieves the more specific / non condensed details for a listing.  You will typ
 
 ***listingId*** - The unique ID for the listing to retrieve the listing for
 
-#### Returns
+### Returns
 
 A single **Listing**
 ```
@@ -149,7 +183,13 @@ A single **Listing**
 }
 ```
 
-### Images
+***
+
+## imageUrl
+> Get URL to use for displaying an image
+
+[Swagger Documentation](http://getrets.net/swagger/ui/index#!/Listing/Listing_Image "")
+
 ```php
 (new GetRETS($customerKey))->getListing()->imageUrl($listingSource, $listingType, $listingId, $photoId, $width = null, $height = null);
 ```
@@ -159,7 +199,7 @@ Retrieves an image(s) associated with a specific listing.
 
 Also, fetching the first photo ($photoId) is a suggested strategy for displaying a thumbnail image.
 
-#### Parameters
+### Parameters
 
 ***listingSource*** - A string representation of the MLS listing source (see FeedsModels.Models.enumListingSource)
 
@@ -173,33 +213,17 @@ Also, fetching the first photo ($photoId) is a suggested strategy for displaying
 
 ***height*** - The height to be used for resizing the photo
 
-#### Returns
+### Returns
 
 A URL for the image specified
 
-### Sorting
-```php
-(new GetRETS($customerKey))->getListing()
-```
-**->setSortBy("providedBy")->setReverseSort(true)**
-```php
-->searchByKeyword($preparedKeywords);
-```
-
-By default listings will be sorted by the price from low to high.  If you want to change the defaults, you can modify these lines.
-
-private $sortBy = "rawListPrice";
-
-private $reverseSort = false;
-
-If you want to sort listings manually within any other portion of the app, you can use the setSortBy and setReverseSort methods as in the following syntax.
-
-```php
-$listings = $getRets->getListing()->setSortBy("providedBy")->setReverseSort(true)->searchByKeyword($preparedKeywords);
-```
-
 ***
-## RETSListing
+
+# RETSListing
+> The main controller for working with the listings using the the live data contained at the MLS using RETS.
+
+[Swagger Documentation](http://getrets.net/swagger/ui/index#/RETSListing "")
+
 ```php
 (new GetRETS($customerKey))->getRETSListing();
 ```
@@ -213,9 +237,191 @@ This is the main entry point for retrieving **live** listing data from the MLS v
 * Keyword searches have less *"fuzzy logic"* applied to them as we are limited to only searching via the available DMQL classes as defined by the MLS.
 * If your MLS is down for maintenance, results can not be retrieved.
 
-***Special Note*** - All of the same functions used for fetching data from the cached data are applicable to this API controller as well, as the exist with the same signatures, only they will go directly to the RETS server. 
+***Special Note*** - All of the same functions used for fetching data from the cached data *(see listing controller functions above)* are applicable to this API controller as well, as the exist with the same signatures, only they will go directly to the RETS server.
 
-### Execute DMQL
+***
+
+## searchByKeyword
+> Search for listings by keyword
+
+[Swagger Documentation](http://getrets.net/swagger/ui/index#!/Listing/Listing_SearchByKeyword "")
+
+```php
+(new GetRETS($customerKey))->getRETSListing()->searchByKeyword($preparedKeywords);
+```
+A simple search that will retrieve listings by a keyword search.
+
+### Parameters
+
+***keyword*** - Keywords to search on
+
+### Returns
+
+An array of **CondensedListing**'s
+```
+[
+  {
+    "id": "string",
+    "listingSourceURLSlug": "string",
+    "listingTypeURLSlug": "string",
+    "listingID": "string",
+    "listingSource": 1,
+    "listingType": 1,
+    "address": "string",
+    "baths": 0,
+    "beds": 0,
+    "listPrice": "string",
+    "rawListPrice": 0,
+    "providedBy": "string",
+    "squareFeet": 0,
+    "lot": "string",
+    "acres": "string"
+  }
+]
+```
+
+***
+
+## search
+> Advanced search
+
+[Swagger Documentation](http://getrets.net/swagger/ui/index#!/Listing/Listing_Search "")
+
+```php
+(new GetRETS($customerKey))->getRETSListing()->search($keywords, $maxPrice, $minPrice, $includeResidential, $includeLand, $includeCommercial);
+```
+A more advanced search that retrieves listings constrained by the optional parameters.
+
+### Parameters
+
+***keyword*** - Keywords to search on
+
+***maxPrice*** - *(optional)* The maximum listing price
+
+***minPrice*** - *(optional)* The minimum listing price
+
+***includeResidential*** - *(optional)* Include residential listings
+
+***includeLand*** - *(optional)* Include land listings
+
+***includeCommercial*** - *(optional)* Include commercial listings
+
+*Note* - If you don't set any of the *include* parameters, all will be assumed as set.
+
+### Returns
+
+An array of **CondensedListing**'s
+```
+[
+  {
+    "id": "string",
+    "listingSourceURLSlug": "string",
+    "listingTypeURLSlug": "string",
+    "listingID": "string",
+    "listingSource": 1,
+    "listingType": 1,
+    "address": "string",
+    "baths": 0,
+    "beds": 0,
+    "listPrice": "string",
+    "rawListPrice": 0,
+    "providedBy": "string",
+    "squareFeet": 0,
+    "lot": "string",
+    "acres": "string"
+  }
+]
+```
+
+***
+
+## details
+> Get details for a specific listing
+
+[Swagger Documentation](http://getrets.net/swagger/ui/index#!/Listing/Listing_GetListingDetails "")
+
+```php
+(new GetRETS($customerKey))->getRETSListing()->details($listingSource, $listingType, $listingId);
+```
+Retrieves the more specific / non condensed details for a listing.  You will typically use the values returned from search functions as the parameters.
+
+### Parameters
+
+***listingSource*** - A string representation of the MLS listing source (see FeedsModels.Models.enumListingSource)
+
+***listingType*** - A string representation of the listing type such as residential, land etc.. (see FeedsModels.Models.enumListingType)
+
+***listingId*** - The unique ID for the listing to retrieve the listing for
+
+### Returns
+
+A single **Listing**
+```
+{
+  "description": "string",
+  "features": [
+    "string"
+  ],
+  "photoCount": 0,
+  "id": "string",
+  "listingSourceURLSlug": "string",
+  "listingTypeURLSlug": "string",
+  "listingID": "string",
+  "listingSource": 1,
+  "listingType": 1,
+  "address": "string",
+  "baths": 0,
+  "beds": 0,
+  "listPrice": "string",
+  "rawListPrice": 0,
+  "providedBy": "string",
+  "squareFeet": 0,
+  "lot": "string",
+  "acres": "string"
+}
+```
+
+***
+
+## imageUrl
+> Get URL to use for displaying an image
+
+[Swagger Documentation](http://getrets.net/swagger/ui/index#!/Listing/Listing_Image "")
+
+```php
+(new GetRETS($customerKey))->getRETSListing()->imageUrl($listingSource, $listingType, $listingId, $photoId, $width = null, $height = null);
+```
+Retrieves an image(s) associated with a specific listing.
+
+***Special Note*** - While the width and height parameters are optional, using them to specify an appropriate image size will increase the speed in which your site renders by lowering the need to download a full size image.
+
+Also, fetching the first photo ($photoId) is a suggested strategy for displaying a thumbnail image.
+
+### Parameters
+
+***listingSource*** - A string representation of the MLS listing source (see FeedsModels.Models.enumListingSource)
+
+***listingType*** - A string representation of the listing type such as residential, land etc.. (see FeedsModels.Models.enumListingType)
+
+***listingId*** - The unique ID for the listing to retrieve the listing for
+
+***photoId*** - A zero based index for the photo to retrieve *(see the photoCount that is returned in the listing details)*.
+
+***width*** - The width to be used for resizing the photo
+
+***height*** - The height to be used for resizing the photo
+
+### Returns
+
+A URL for the image specified
+
+***
+
+## executeDMQL
+> Return MLS results via a DMQL query
+
+[Swagger Documentation](http://getrets.net/swagger/ui/index#!/RETSListing/RETSListing_ExecuteDMQL "")
+
 ```php
 (new GetRETS($customerKey))->getRETSListing()->executeDMQL($query, $feedName, $listingType);
 ```
@@ -223,7 +429,7 @@ This is a powerful function that will execute raw DMQL against the RETS MLS serv
 
 ***Special Note*** - These results will not be returned in a translated fashion similiar to the other listing detail searches.  These results are in the format as returned from the MLS RETS server.  If you wish to retrieve listings in a **translated** format use getListingsByDMQL.
 
-#### Parameters
+### Parameters
 
 ***query*** - The DMQL to be executed against the MLS RETS server
 
@@ -231,7 +437,7 @@ This is a powerful function that will execute raw DMQL against the RETS MLS serv
 
 ***listingType*** - A string representation of the listing type such as residential, land etc.. (see FeedsModels.Models.enumListingType)
 
-#### Returns
+### Returns
 
 An enveloped response with the success or failure of the query, as well as the raw serialized results that were fetched.  These serialized results will be different for each feedName and listingType.
 
@@ -248,13 +454,19 @@ An enveloped response with the success or failure of the query, as well as the r
 }
 ```
 
-### Get Translated Listings by DMQL
+***
+
+## getListingsByDMQL
+> Get translated listings by DMQL query
+
+[Swagger Documentation](http://getrets.net/swagger/ui/index#!/RETSListing/RETSListing_GetListingsByDMQL "")
+
 ```php
 (new GetRETS($customerKey))->getRETSListing()->getListingsByDMQL($query, $feedName, $listingType);
 ```
 This is a powerful function that will execute raw DMQL against the RETS MLS server and will return the results as a serialized object.  It is similar to executeDMQL, however this function will **translate** data to be in the same format as returned by other methods that retrieve listing details.
 
-#### Parameters
+### Parameters
 
 ***query*** - The DMQL to be executed against the MLS RETS server
 
@@ -262,7 +474,7 @@ This is a powerful function that will execute raw DMQL against the RETS MLS serv
 
 ***listingType*** - A string representation of the listing type such as residential, land etc.. (see FeedsModels.Models.enumListingType)
 
-#### Returns
+### Returns
 
 An enveloped response with the success or failure of the query, as well as the raw serialized results that were fetched.
 
@@ -299,7 +511,12 @@ An enveloped response with the success or failure of the query, as well as the r
 ```
 
 ***
-## Geocoding
+
+# Geocoding
+> The main controller for working with addresses
+
+[Swagger Documentation](http://getrets.net/swagger/ui/index#/Geocoding "")
+
 ```php
 (new GetRETS($customerKey))->getGeocoding();
 ```
@@ -307,14 +524,20 @@ This controller is a planned area of growth to provide more advanced geo-spatial
 
 If you provide a google geocode key to be associated with your account, you can use these methods.
 
-### Parse Google Results
+***
+
+## parseGoogleResults
+> Translates results returned by Google
+
+[Swagger Documentation](http://getrets.net/swagger/ui/index#!/Geocoding/Geocoding_ParseGoogleResults "")
+
 ```php
 (new GetRETS($customerKey))->getGeocoding()->parseGoogleResults($googleResults);
 ```
 
-This function will parse the results returned from googles service and translate them into a consistent format more suitable for searching the listing data.
+This function will parse the results returned from Google's service and translate them into a consistent format more suitable for searching the listing data.
 
-#### Parameters
+### Parameters
 
 ***googleResults*** - Results from Google's geocoder.geocode
 ```
@@ -357,40 +580,7 @@ This function will parse the results returned from googles service and translate
 ]
 ```
 
-#### Returns
-
-Data translated as **AddressDetail**'s.
-
-```
-[
-  {
-    "streetNumber": "string",
-    "street": "string",
-    "city": "string",
-    "county": "string",
-    "state": "string",
-    "stateAbbreviation": "string",
-    "country": "string",
-    "postalCode": "string",
-    "latitude": 0,
-    "longitude": 0,
-    "formattedAddress": "string"
-  }
-]
-```
-
-### Parse Google Results
-```php
-(new GetRETS($customerKey))->getGeocoding()->googleGeocode($address);
-```
-
-This function will take a keyword and run it through Google's geocoding service and return the translated results.
-
-#### Parameters
-
-***address*** - A free form text to geocode (The expectation is that this is a possible address)
-
-#### Returns
+### Returns
 
 Data translated as **AddressDetail**'s.
 
@@ -413,5 +603,81 @@ Data translated as **AddressDetail**'s.
 ```
 
 ***
+
+## googleGeocode
+> Geocode address entered as free-form text
+
+[Swagger Documentation](http://getrets.net/swagger/ui/index#!/Geocoding/Geocoding_GoogleGeocode "")
+
+```php
+(new GetRETS($customerKey))->getGeocoding()->googleGeocode($address);
+```
+
+This function will take a keyword and run it through Google's geocoding service and return the translated results.
+
+### Parameters
+
+***address*** - A free form text to geocode (The expectation is that this is a possible address)
+
+### Returns
+
+Data translated as **AddressDetail**'s.
+
+```
+[
+  {
+    "streetNumber": "string",
+    "street": "string",
+    "city": "string",
+    "county": "string",
+    "state": "string",
+    "stateAbbreviation": "string",
+    "country": "string",
+    "postalCode": "string",
+    "latitude": 0,
+    "longitude": 0,
+    "formattedAddress": "string"
+  }
+]
+```
+
+***
+
+# Helper Functions
+The following methods aren't API endpoints but are available in the SDK for assistance with the functionality.
+
+***
+
+## setSortBy / setReverseSort
+> Used for sorting / ordering the results that are returned
+
+```php
+(new GetRETS($customerKey))->getListing()->setSortBy("providedBy")->setReverseSort(true)->searchByKeyword($preparedKeywords);
+```
+
+**setSortBy**
+
+This property is used to set column by which the data is sorted.
+
+**setReverseSort**
+
+This property is used to set the order (ascending / descending) by which the sortBy column will ordered by. *(Default is false meaning ascending)*
+
+By default listings will be sorted by the price from low to high.  If you want to change the defaults, you can modify these lines.
+
+```php
+private $sortBy = "rawListPrice";
+
+private $reverseSort = false;
+```
+
+If you want to sort listings manually within any other portion of the app, you can use the setSortBy and setReverseSort methods as in the following syntax.
+
+```php
+$listings = $getRets->getListing()->setSortBy("providedBy")->setReverseSort(true)->searchByKeyword($preparedKeywords);
+```
+
+***
+
 # Further Reading
 More information on the API itself can be found at the Swagger UI (<http://getrets.net/swagger/>). 

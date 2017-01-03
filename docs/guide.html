@@ -13,7 +13,22 @@
 
 <p>A simple &quot;no framework&quot; php wrapper for the GetRETS&reg; API from timitek (<a href="http://www.timitek.com">http://www.timitek.com</a>).</p>
 
-<h1 id="toc_1">How To Use</h1>
+<hr>
+
+<h1 id="toc_1">Table of Contents</h1>
+
+<ol>
+<li><a href="#toc_2">How To Use</a></li>
+<li><a href="#toc_3">Listing</a></li>
+<li><a href="#toc_16">RETSListing</a></li>
+<li><a href="#toc_35">Geocoding</a></li>
+<li><a href="#toc_42">Helper Functions</a></li>
+<li><a href="#toc_44">Further Reading</a></li>
+</ol>
+
+<hr>
+
+<h1 id="toc_2">How To Use</h1>
 
 <pre><code class="php"><span class="keyword">include</span> <span class="string">"GetRETS.php"</span>;
 <span class="variable">$getRets</span> = <span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>);
@@ -22,7 +37,13 @@
 
 <hr>
 
-<h2 id="toc_2">Listing</h2>
+<h1 id="toc_3">Listing</h1>
+
+<blockquote>
+<p>The main controller for working with the listings using the pre-fetched / cached data.</p>
+</blockquote>
+
+<p><a href="http://getrets.net/swagger/ui/index#/Listing">Swagger Documentation</a></p>
 
 <pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getListing();
 </code></pre>
@@ -43,18 +64,26 @@
 <li>Data is not 100% live <em>(We are constantly polling the MLS for new data but it could be an hour or so before new listings show up, and we refresh each listing every 24 hours)</em></li>
 </ul>
 
-<h3 id="toc_3">SearchByKeyword</h3>
+<hr>
+
+<h2 id="toc_4">searchByKeyword</h2>
+
+<blockquote>
+<p>Search for listings by keyword</p>
+</blockquote>
+
+<p><a href="http://getrets.net/swagger/ui/index#!/Listing/Listing_SearchByKeyword">Swagger Documentation</a></p>
 
 <pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getListing()-&gt;searchByKeyword(<span class="variable">$preparedKeywords</span>);
 </code></pre>
 
 <p>A simple search that will retrieve listings by a keyword search.</p>
 
-<h4 id="toc_4">Parameters</h4>
+<h3 id="toc_5">Parameters</h3>
 
 <p><strong><em>keyword</em></strong> - Keywords to search on</p>
 
-<h4 id="toc_5">Returns</h4>
+<h3 id="toc_6">Returns</h3>
 
 <p>An array of <strong>CondensedListing</strong>&#39;s</p>
 
@@ -79,14 +108,22 @@
 ]
 </code></pre>
 
-<h3 id="toc_6">Search</h3>
+<hr>
+
+<h2 id="toc_7">search</h2>
+
+<blockquote>
+<p>Advanced search</p>
+</blockquote>
+
+<p><a href="http://getrets.net/swagger/ui/index#!/Listing/Listing_Search">Swagger Documentation</a></p>
 
 <pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getListing()-&gt;search(<span class="variable">$keywords</span>, <span class="variable">$maxPrice</span>, <span class="variable">$minPrice</span>, <span class="variable">$includeResidential</span>, <span class="variable">$includeLand</span>, <span class="variable">$includeCommercial</span>);
 </code></pre>
 
 <p>A more advanced search that retrieves listings constrained by the optional parameters.</p>
 
-<h4 id="toc_7">Parameters</h4>
+<h3 id="toc_8">Parameters</h3>
 
 <p><strong><em>keyword</em></strong> - Keywords to search on</p>
 
@@ -102,7 +139,7 @@
 
 <p><em>Note</em> - If you don&#39;t set any of the <em>include</em> parameters, all will be assumed as set.</p>
 
-<h4 id="toc_8">Returns</h4>
+<h3 id="toc_9">Returns</h3>
 
 <p>An array of <strong>CondensedListing</strong>&#39;s</p>
 
@@ -127,14 +164,22 @@
 ]
 </code></pre>
 
-<h3 id="toc_9">Listing Details</h3>
+<hr>
+
+<h2 id="toc_10">details</h2>
+
+<blockquote>
+<p>Get details for a specific listing</p>
+</blockquote>
+
+<p><a href="http://getrets.net/swagger/ui/index#!/Listing/Listing_GetListingDetails">Swagger Documentation</a></p>
 
 <pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getListing()-&gt;details(<span class="variable">$listingSource</span>, <span class="variable">$listingType</span>, <span class="variable">$listingId</span>);
 </code></pre>
 
 <p>Retrieves the more specific / non condensed details for a listing.  You will typically use the values returned from search functions as the parameters.</p>
 
-<h4 id="toc_10">Parameters</h4>
+<h3 id="toc_11">Parameters</h3>
 
 <p><strong><em>listingSource</em></strong> - A string representation of the MLS listing source (see FeedsModels.Models.enumListingSource)</p>
 
@@ -142,7 +187,7 @@
 
 <p><strong><em>listingId</em></strong> - The unique ID for the listing to retrieve the listing for</p>
 
-<h4 id="toc_11">Returns</h4>
+<h3 id="toc_12">Returns</h3>
 
 <p>A single <strong>Listing</strong></p>
 
@@ -170,7 +215,15 @@
 }
 </code></pre>
 
-<h3 id="toc_12">Images</h3>
+<hr>
+
+<h2 id="toc_13">imageUrl</h2>
+
+<blockquote>
+<p>Get URL to use for displaying an image</p>
+</blockquote>
+
+<p><a href="http://getrets.net/swagger/ui/index#!/Listing/Listing_Image">Swagger Documentation</a></p>
 
 <pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getListing()-&gt;imageUrl(<span class="variable">$listingSource</span>, <span class="variable">$listingType</span>, <span class="variable">$listingId</span>, <span class="variable">$photoId</span>, <span class="variable">$width</span> = <span class="keyword">null</span>, <span class="variable">$height</span> = <span class="keyword">null</span>);
 </code></pre>
@@ -181,7 +234,7 @@
 
 <p>Also, fetching the first photo ($photoId) is a suggested strategy for displaying a thumbnail image.</p>
 
-<h4 id="toc_13">Parameters</h4>
+<h3 id="toc_14">Parameters</h3>
 
 <p><strong><em>listingSource</em></strong> - A string representation of the MLS listing source (see FeedsModels.Models.enumListingSource)</p>
 
@@ -195,34 +248,19 @@
 
 <p><strong><em>height</em></strong> - The height to be used for resizing the photo</p>
 
-<h4 id="toc_14">Returns</h4>
+<h3 id="toc_15">Returns</h3>
 
 <p>A URL for the image specified</p>
 
-<h3 id="toc_15">Sorting</h3>
-
-<pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getListing()
-</code></pre>
-
-<p><strong>-&gt;setSortBy(&quot;providedBy&quot;)-&gt;setReverseSort(true)</strong></p>
-
-<pre><code class="php">-&gt;searchByKeyword(<span class="variable">$preparedKeywords</span>);
-</code></pre>
-
-<p>By default listings will be sorted by the price from low to high.  If you want to change the defaults, you can modify these lines.</p>
-
-<p>private $sortBy = &quot;rawListPrice&quot;;</p>
-
-<p>private $reverseSort = false;</p>
-
-<p>If you want to sort listings manually within any other portion of the app, you can use the setSortBy and setReverseSort methods as in the following syntax.</p>
-
-<pre><code class="php"><span class="variable">$listings</span> = <span class="variable">$getRets</span>-&gt;getListing()-&gt;setSortBy(<span class="string">"providedBy"</span>)-&gt;setReverseSort(<span class="keyword">true</span>)-&gt;searchByKeyword(<span class="variable">$preparedKeywords</span>);
-</code></pre>
-
 <hr>
 
-<h2 id="toc_16">RETSListing</h2>
+<h1 id="toc_16">RETSListing</h1>
+
+<blockquote>
+<p>The main controller for working with the listings using the the live data contained at the MLS using RETS.</p>
+</blockquote>
+
+<p><a href="http://getrets.net/swagger/ui/index#/RETSListing">Swagger Documentation</a></p>
 
 <pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getRETSListing();
 </code></pre>
@@ -243,9 +281,205 @@
 <li>If your MLS is down for maintenance, results can not be retrieved.</li>
 </ul>
 
-<p><strong><em>Special Note</em></strong> - All of the same functions used for fetching data from the cached data are applicable to this API controller as well, as the exist with the same signatures, only they will go directly to the RETS server. </p>
+<p><strong><em>Special Note</em></strong> - All of the same functions used for fetching data from the cached data <em>(see listing controller functions above)</em> are applicable to this API controller as well, as the exist with the same signatures, only they will go directly to the RETS server.</p>
 
-<h3 id="toc_17">Execute DMQL</h3>
+<hr>
+
+<h2 id="toc_17">searchByKeyword</h2>
+
+<blockquote>
+<p>Search for listings by keyword</p>
+</blockquote>
+
+<p><a href="http://getrets.net/swagger/ui/index#!/Listing/Listing_SearchByKeyword">Swagger Documentation</a></p>
+
+<pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getRETSListing()-&gt;searchByKeyword(<span class="variable">$preparedKeywords</span>);
+</code></pre>
+
+<p>A simple search that will retrieve listings by a keyword search.</p>
+
+<h3 id="toc_18">Parameters</h3>
+
+<p><strong><em>keyword</em></strong> - Keywords to search on</p>
+
+<h3 id="toc_19">Returns</h3>
+
+<p>An array of <strong>CondensedListing</strong>&#39;s</p>
+
+<pre><code>[
+  {
+    &quot;id&quot;: &quot;string&quot;,
+    &quot;listingSourceURLSlug&quot;: &quot;string&quot;,
+    &quot;listingTypeURLSlug&quot;: &quot;string&quot;,
+    &quot;listingID&quot;: &quot;string&quot;,
+    &quot;listingSource&quot;: 1,
+    &quot;listingType&quot;: 1,
+    &quot;address&quot;: &quot;string&quot;,
+    &quot;baths&quot;: 0,
+    &quot;beds&quot;: 0,
+    &quot;listPrice&quot;: &quot;string&quot;,
+    &quot;rawListPrice&quot;: 0,
+    &quot;providedBy&quot;: &quot;string&quot;,
+    &quot;squareFeet&quot;: 0,
+    &quot;lot&quot;: &quot;string&quot;,
+    &quot;acres&quot;: &quot;string&quot;
+  }
+]
+</code></pre>
+
+<hr>
+
+<h2 id="toc_20">search</h2>
+
+<blockquote>
+<p>Advanced search</p>
+</blockquote>
+
+<p><a href="http://getrets.net/swagger/ui/index#!/Listing/Listing_Search">Swagger Documentation</a></p>
+
+<pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getRETSListing()-&gt;search(<span class="variable">$keywords</span>, <span class="variable">$maxPrice</span>, <span class="variable">$minPrice</span>, <span class="variable">$includeResidential</span>, <span class="variable">$includeLand</span>, <span class="variable">$includeCommercial</span>);
+</code></pre>
+
+<p>A more advanced search that retrieves listings constrained by the optional parameters.</p>
+
+<h3 id="toc_21">Parameters</h3>
+
+<p><strong><em>keyword</em></strong> - Keywords to search on</p>
+
+<p><strong><em>maxPrice</em></strong> - <em>(optional)</em> The maximum listing price</p>
+
+<p><strong><em>minPrice</em></strong> - <em>(optional)</em> The minimum listing price</p>
+
+<p><strong><em>includeResidential</em></strong> - <em>(optional)</em> Include residential listings</p>
+
+<p><strong><em>includeLand</em></strong> - <em>(optional)</em> Include land listings</p>
+
+<p><strong><em>includeCommercial</em></strong> - <em>(optional)</em> Include commercial listings</p>
+
+<p><em>Note</em> - If you don&#39;t set any of the <em>include</em> parameters, all will be assumed as set.</p>
+
+<h3 id="toc_22">Returns</h3>
+
+<p>An array of <strong>CondensedListing</strong>&#39;s</p>
+
+<pre><code>[
+  {
+    &quot;id&quot;: &quot;string&quot;,
+    &quot;listingSourceURLSlug&quot;: &quot;string&quot;,
+    &quot;listingTypeURLSlug&quot;: &quot;string&quot;,
+    &quot;listingID&quot;: &quot;string&quot;,
+    &quot;listingSource&quot;: 1,
+    &quot;listingType&quot;: 1,
+    &quot;address&quot;: &quot;string&quot;,
+    &quot;baths&quot;: 0,
+    &quot;beds&quot;: 0,
+    &quot;listPrice&quot;: &quot;string&quot;,
+    &quot;rawListPrice&quot;: 0,
+    &quot;providedBy&quot;: &quot;string&quot;,
+    &quot;squareFeet&quot;: 0,
+    &quot;lot&quot;: &quot;string&quot;,
+    &quot;acres&quot;: &quot;string&quot;
+  }
+]
+</code></pre>
+
+<hr>
+
+<h2 id="toc_23">details</h2>
+
+<blockquote>
+<p>Get details for a specific listing</p>
+</blockquote>
+
+<p><a href="http://getrets.net/swagger/ui/index#!/Listing/Listing_GetListingDetails">Swagger Documentation</a></p>
+
+<pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getRETSListing()-&gt;details(<span class="variable">$listingSource</span>, <span class="variable">$listingType</span>, <span class="variable">$listingId</span>);
+</code></pre>
+
+<p>Retrieves the more specific / non condensed details for a listing.  You will typically use the values returned from search functions as the parameters.</p>
+
+<h3 id="toc_24">Parameters</h3>
+
+<p><strong><em>listingSource</em></strong> - A string representation of the MLS listing source (see FeedsModels.Models.enumListingSource)</p>
+
+<p><strong><em>listingType</em></strong> - A string representation of the listing type such as residential, land etc.. (see FeedsModels.Models.enumListingType)</p>
+
+<p><strong><em>listingId</em></strong> - The unique ID for the listing to retrieve the listing for</p>
+
+<h3 id="toc_25">Returns</h3>
+
+<p>A single <strong>Listing</strong></p>
+
+<pre><code>{
+  &quot;description&quot;: &quot;string&quot;,
+  &quot;features&quot;: [
+    &quot;string&quot;
+  ],
+  &quot;photoCount&quot;: 0,
+  &quot;id&quot;: &quot;string&quot;,
+  &quot;listingSourceURLSlug&quot;: &quot;string&quot;,
+  &quot;listingTypeURLSlug&quot;: &quot;string&quot;,
+  &quot;listingID&quot;: &quot;string&quot;,
+  &quot;listingSource&quot;: 1,
+  &quot;listingType&quot;: 1,
+  &quot;address&quot;: &quot;string&quot;,
+  &quot;baths&quot;: 0,
+  &quot;beds&quot;: 0,
+  &quot;listPrice&quot;: &quot;string&quot;,
+  &quot;rawListPrice&quot;: 0,
+  &quot;providedBy&quot;: &quot;string&quot;,
+  &quot;squareFeet&quot;: 0,
+  &quot;lot&quot;: &quot;string&quot;,
+  &quot;acres&quot;: &quot;string&quot;
+}
+</code></pre>
+
+<hr>
+
+<h2 id="toc_26">imageUrl</h2>
+
+<blockquote>
+<p>Get URL to use for displaying an image</p>
+</blockquote>
+
+<p><a href="http://getrets.net/swagger/ui/index#!/Listing/Listing_Image">Swagger Documentation</a></p>
+
+<pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getRETSListing()-&gt;imageUrl(<span class="variable">$listingSource</span>, <span class="variable">$listingType</span>, <span class="variable">$listingId</span>, <span class="variable">$photoId</span>, <span class="variable">$width</span> = <span class="keyword">null</span>, <span class="variable">$height</span> = <span class="keyword">null</span>);
+</code></pre>
+
+<p>Retrieves an image(s) associated with a specific listing.</p>
+
+<p><strong><em>Special Note</em></strong> - While the width and height parameters are optional, using them to specify an appropriate image size will increase the speed in which your site renders by lowering the need to download a full size image.</p>
+
+<p>Also, fetching the first photo ($photoId) is a suggested strategy for displaying a thumbnail image.</p>
+
+<h3 id="toc_27">Parameters</h3>
+
+<p><strong><em>listingSource</em></strong> - A string representation of the MLS listing source (see FeedsModels.Models.enumListingSource)</p>
+
+<p><strong><em>listingType</em></strong> - A string representation of the listing type such as residential, land etc.. (see FeedsModels.Models.enumListingType)</p>
+
+<p><strong><em>listingId</em></strong> - The unique ID for the listing to retrieve the listing for</p>
+
+<p><strong><em>photoId</em></strong> - A zero based index for the photo to retrieve <em>(see the photoCount that is returned in the listing details)</em>.</p>
+
+<p><strong><em>width</em></strong> - The width to be used for resizing the photo</p>
+
+<p><strong><em>height</em></strong> - The height to be used for resizing the photo</p>
+
+<h3 id="toc_28">Returns</h3>
+
+<p>A URL for the image specified</p>
+
+<hr>
+
+<h2 id="toc_29">executeDMQL</h2>
+
+<blockquote>
+<p>Return MLS results via a DMQL query</p>
+</blockquote>
+
+<p><a href="http://getrets.net/swagger/ui/index#!/RETSListing/RETSListing_ExecuteDMQL">Swagger Documentation</a></p>
 
 <pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getRETSListing()-&gt;executeDMQL(<span class="variable">$query</span>, <span class="variable">$feedName</span>, <span class="variable">$listingType</span>);
 </code></pre>
@@ -254,7 +488,7 @@
 
 <p><strong><em>Special Note</em></strong> - These results will not be returned in a translated fashion similiar to the other listing detail searches.  These results are in the format as returned from the MLS RETS server.  If you wish to retrieve listings in a <strong>translated</strong> format use getListingsByDMQL.</p>
 
-<h4 id="toc_18">Parameters</h4>
+<h3 id="toc_30">Parameters</h3>
 
 <p><strong><em>query</em></strong> - The DMQL to be executed against the MLS RETS server</p>
 
@@ -262,7 +496,7 @@
 
 <p><strong><em>listingType</em></strong> - A string representation of the listing type such as residential, land etc.. (see FeedsModels.Models.enumListingType)</p>
 
-<h4 id="toc_19">Returns</h4>
+<h3 id="toc_31">Returns</h3>
 
 <p>An enveloped response with the success or failure of the query, as well as the raw serialized results that were fetched.  These serialized results will be different for each feedName and listingType.</p>
 
@@ -278,14 +512,22 @@
 }
 </code></pre>
 
-<h3 id="toc_20">Get Translated Listings by DMQL</h3>
+<hr>
+
+<h2 id="toc_32">getListingsByDMQL</h2>
+
+<blockquote>
+<p>Get translated listings by DMQL query</p>
+</blockquote>
+
+<p><a href="http://getrets.net/swagger/ui/index#!/RETSListing/RETSListing_GetListingsByDMQL">Swagger Documentation</a></p>
 
 <pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getRETSListing()-&gt;getListingsByDMQL(<span class="variable">$query</span>, <span class="variable">$feedName</span>, <span class="variable">$listingType</span>);
 </code></pre>
 
 <p>This is a powerful function that will execute raw DMQL against the RETS MLS server and will return the results as a serialized object.  It is similar to executeDMQL, however this function will <strong>translate</strong> data to be in the same format as returned by other methods that retrieve listing details.</p>
 
-<h4 id="toc_21">Parameters</h4>
+<h3 id="toc_33">Parameters</h3>
 
 <p><strong><em>query</em></strong> - The DMQL to be executed against the MLS RETS server</p>
 
@@ -293,7 +535,7 @@
 
 <p><strong><em>listingType</em></strong> - A string representation of the listing type such as residential, land etc.. (see FeedsModels.Models.enumListingType)</p>
 
-<h4 id="toc_22">Returns</h4>
+<h3 id="toc_34">Returns</h3>
 
 <p>An enveloped response with the success or failure of the query, as well as the raw serialized results that were fetched.</p>
 
@@ -330,7 +572,13 @@
 
 <hr>
 
-<h2 id="toc_23">Geocoding</h2>
+<h1 id="toc_35">Geocoding</h1>
+
+<blockquote>
+<p>The main controller for working with addresses</p>
+</blockquote>
+
+<p><a href="http://getrets.net/swagger/ui/index#/Geocoding">Swagger Documentation</a></p>
 
 <pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getGeocoding();
 </code></pre>
@@ -339,14 +587,22 @@
 
 <p>If you provide a google geocode key to be associated with your account, you can use these methods.</p>
 
-<h3 id="toc_24">Parse Google Results</h3>
+<hr>
+
+<h2 id="toc_36">parseGoogleResults</h2>
+
+<blockquote>
+<p>Translates results returned by Google</p>
+</blockquote>
+
+<p><a href="http://getrets.net/swagger/ui/index#!/Geocoding/Geocoding_ParseGoogleResults">Swagger Documentation</a></p>
 
 <pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getGeocoding()-&gt;parseGoogleResults(<span class="variable">$googleResults</span>);
 </code></pre>
 
-<p>This function will parse the results returned from googles service and translate them into a consistent format more suitable for searching the listing data.</p>
+<p>This function will parse the results returned from Google&#39;s service and translate them into a consistent format more suitable for searching the listing data.</p>
 
-<h4 id="toc_25">Parameters</h4>
+<h3 id="toc_37">Parameters</h3>
 
 <p><strong><em>googleResults</em></strong> - Results from Google&#39;s geocoder.geocode</p>
 
@@ -389,39 +645,7 @@
 ]
 </code></pre>
 
-<h4 id="toc_26">Returns</h4>
-
-<p>Data translated as <strong>AddressDetail</strong>&#39;s.</p>
-
-<pre><code>[
-  {
-    &quot;streetNumber&quot;: &quot;string&quot;,
-    &quot;street&quot;: &quot;string&quot;,
-    &quot;city&quot;: &quot;string&quot;,
-    &quot;county&quot;: &quot;string&quot;,
-    &quot;state&quot;: &quot;string&quot;,
-    &quot;stateAbbreviation&quot;: &quot;string&quot;,
-    &quot;country&quot;: &quot;string&quot;,
-    &quot;postalCode&quot;: &quot;string&quot;,
-    &quot;latitude&quot;: 0,
-    &quot;longitude&quot;: 0,
-    &quot;formattedAddress&quot;: &quot;string&quot;
-  }
-]
-</code></pre>
-
-<h3 id="toc_27">Parse Google Results</h3>
-
-<pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getGeocoding()-&gt;googleGeocode(<span class="variable">$address</span>);
-</code></pre>
-
-<p>This function will take a keyword and run it through Google&#39;s geocoding service and return the translated results.</p>
-
-<h4 id="toc_28">Parameters</h4>
-
-<p><strong><em>address</em></strong> - A free form text to geocode (The expectation is that this is a possible address)</p>
-
-<h4 id="toc_29">Returns</h4>
+<h3 id="toc_38">Returns</h3>
 
 <p>Data translated as <strong>AddressDetail</strong>&#39;s.</p>
 
@@ -444,7 +668,84 @@
 
 <hr>
 
-<h1 id="toc_30">Further Reading</h1>
+<h2 id="toc_39">googleGeocode</h2>
+
+<blockquote>
+<p>Geocode address entered as free-form text</p>
+</blockquote>
+
+<p><a href="http://getrets.net/swagger/ui/index#!/Geocoding/Geocoding_GoogleGeocode">Swagger Documentation</a></p>
+
+<pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getGeocoding()-&gt;googleGeocode(<span class="variable">$address</span>);
+</code></pre>
+
+<p>This function will take a keyword and run it through Google&#39;s geocoding service and return the translated results.</p>
+
+<h3 id="toc_40">Parameters</h3>
+
+<p><strong><em>address</em></strong> - A free form text to geocode (The expectation is that this is a possible address)</p>
+
+<h3 id="toc_41">Returns</h3>
+
+<p>Data translated as <strong>AddressDetail</strong>&#39;s.</p>
+
+<pre><code>[
+  {
+    &quot;streetNumber&quot;: &quot;string&quot;,
+    &quot;street&quot;: &quot;string&quot;,
+    &quot;city&quot;: &quot;string&quot;,
+    &quot;county&quot;: &quot;string&quot;,
+    &quot;state&quot;: &quot;string&quot;,
+    &quot;stateAbbreviation&quot;: &quot;string&quot;,
+    &quot;country&quot;: &quot;string&quot;,
+    &quot;postalCode&quot;: &quot;string&quot;,
+    &quot;latitude&quot;: 0,
+    &quot;longitude&quot;: 0,
+    &quot;formattedAddress&quot;: &quot;string&quot;
+  }
+]
+</code></pre>
+
+<hr>
+
+<h1 id="toc_42">Helper Functions</h1>
+
+<p>The following methods aren&#39;t API endpoints but are available in the SDK for assistance with the functionality.</p>
+
+<hr>
+
+<h2 id="toc_43">setSortBy / setReverseSort</h2>
+
+<blockquote>
+<p>Used for sorting / ordering the results that are returned</p>
+</blockquote>
+
+<pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getListing()-&gt;setSortBy(<span class="string">"providedBy"</span>)-&gt;setReverseSort(<span class="keyword">true</span>)-&gt;searchByKeyword(<span class="variable">$preparedKeywords</span>);
+</code></pre>
+
+<p><strong>setSortBy</strong></p>
+
+<p>This property is used to set column by which the data is sorted.</p>
+
+<p><strong>setReverseSort</strong></p>
+
+<p>This property is used to set the order (ascending / descending) by which the sortBy column will ordered by. <em>(Default is false meaning ascending)</em></p>
+
+<p>By default listings will be sorted by the price from low to high.  If you want to change the defaults, you can modify these lines.</p>
+
+<pre><code class="php"><span class="keyword">private</span> <span class="variable">$sortBy</span> = <span class="string">"rawListPrice"</span>;
+
+<span class="keyword">private</span> <span class="variable">$reverseSort</span> = <span class="keyword">false</span>;
+</code></pre>
+
+<p>If you want to sort listings manually within any other portion of the app, you can use the setSortBy and setReverseSort methods as in the following syntax.</p>
+
+<pre><code class="php"><span class="variable">$listings</span> = <span class="variable">$getRets</span>-&gt;getListing()-&gt;setSortBy(<span class="string">"providedBy"</span>)-&gt;setReverseSort(<span class="keyword">true</span>)-&gt;searchByKeyword(<span class="variable">$preparedKeywords</span>);
+</code></pre>
+
+<hr>
+
+<h1 id="toc_44">Further Reading</h1>
 
 <p>More information on the API itself can be found at the Swagger UI (<a href="http://getrets.net/swagger/">http://getrets.net/swagger/</a>). </p>
 
