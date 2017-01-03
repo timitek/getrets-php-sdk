@@ -5,8 +5,6 @@ A simple "no framework" php wrapper for the GetRETS&reg; API from timitek (<http
 ***
 
 # Table of Contents
-* [getrets-php-sdk](#getrets-php-sdk)
-* [Table of Contents](#table-of-contents)
 * [How To Use](#how-to-use)
 * [Listing](#listing)
   * [searchByKeyword](#searchbykeyword)
