@@ -5,12 +5,27 @@ A simple "no framework" php wrapper for the GetRETS&reg; API from timitek (<http
 ***
 
 # Table of Contents
-1. [How To Use](#toc_2)
-2. [Listing](#toc_3)
-3. [RETSListing](#toc_16)
-4. [Geocoding](#toc_35)
-5. [Helper Functions](#toc_42)
-6. [Further Reading](#toc_44)
+* [getrets-php-sdk](#getrets-php-sdk)
+* [Table of Contents](#table-of-contents)
+* [How To Use](#how-to-use)
+* [Listing](#listing)
+  * [searchByKeyword](#searchbykeyword)
+  * [search](#search)
+  * [details](#details)
+  * [imageUrl](#imageurl)
+* [RETSListing](#retslisting)
+  * [searchByKeyword](#searchbykeyword-1)
+  * [search](#search-1)
+  * [details](#details-1)
+  * [imageUrl](#imageurl-1)
+  * [executeDMQL](#executedmql)
+  * [getListingsByDMQL](#getlistingsbydmql)
+* [Geocoding](#geocoding)
+  * [parseGoogleResults](#parsegoogleresults)
+  * [googleGeocode](#googlegeocode)
+* [Helper Functions](#helper-functions)
+* [Further Reading](#further-reading)
+
 
 ***
 
