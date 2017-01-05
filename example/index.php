@@ -4,19 +4,21 @@ include "../GetRETS.php";
 
 ini_set('max_execution_time', 300);  // Give enough time (5 mintues) for slow DMQL queries
 
-$customerKey = '';
+$customerKey = 'aspirerealty';
 
 $isPublic = false;
 $exampleAddress = "sheridan, ar";
 $exampleSource = "CARMLS";
 
-$keywords = (array_key_exists("keywords", $_POST) ? $_POST["keywords"] : $exampleAddress );
 $disableCache = !empty($_POST["disableCache"]);
+$keywords = (array_key_exists("keywords", $_POST) ? $_POST["keywords"] : $exampleAddress );
 $maxPrice = (array_key_exists("maxPrice", $_POST) ? $_POST["maxPrice"] : null );
 $minPrice = (array_key_exists("minPrice", $_POST) ? $_POST["minPrice"] : null );
 $includeResidential = array_key_exists("includeResidential", $_POST);
 $includeLand = array_key_exists("includeLand", $_POST);
 $includeCommercial = array_key_exists("includeCommercial", $_POST);
+$sortBy = (array_key_exists("sortBy", $_POST) ? $_POST["sortBy"] : "rawListPrice" );
+$reverseSort = array_key_exists("reverseSort", $_POST);
 
 // Only let the public search the last days worth of modified residential listings (to prevent abusive queries)
 $publicDMQL = '(L_UpdateDate=' . date('Y-m-d',(strtotime('-1 day', time()))) . '-' . date('Y-m-d') . ')';
@@ -33,25 +35,35 @@ $detail = NULL;
 $rawData = NULL;
 $listings = null;
 
+$getRets = new GetRETS($customerKey);
+
 if (!empty($_POST)) {
-  $getRets = new GetRETS($customerKey);
+
   // Keyword Search
   if (array_key_exists("searchByKeyword", $_POST)) {
     $preparedKeywords = htmlspecialchars($_POST["keywords"]);
     if ($disableCache) {
-      $listings = $getRets->getRETSListing()->searchByKeyword($preparedKeywords);
+      $listings = $getRets->getRETSListing()
+                          ->setSortBy($sortBy)->setReverseSort($reverseSort)
+                          ->searchByKeyword($preparedKeywords);
     }
     else {
-      $listings = $getRets->getListing()->searchByKeyword($preparedKeywords);
+      $listings = $getRets->getListing()
+                          ->setSortBy($sortBy)->setReverseSort($reverseSort)
+                          ->searchByKeyword($preparedKeywords);
     }
   }
   // Advanced Search
   else if (array_key_exists("search", $_POST)) {
     if ($disableCache) {
-      $listings = $getRets->getRETSListing()->search($keywords, $maxPrice, $minPrice, $includeResidential, $includeLand, $includeCommercial);
+      $listings = $getRets->getRETSListing()
+                          ->setSortBy($sortBy)->setReverseSort($reverseSort)
+                          ->search($keywords, $maxPrice, $minPrice, $includeResidential, $includeLand, $includeCommercial);
     }
     else {
-      $listings = $getRets->getListing()->search($keywords, $maxPrice, $minPrice, $includeResidential, $includeLand, $includeCommercial);
+      $listings = $getRets->getListing()
+                          ->setSortBy($sortBy)->setReverseSort($reverseSort)
+                          ->search($keywords, $maxPrice, $minPrice, $includeResidential, $includeLand, $includeCommercial);
     }
   }
   // Image
@@ -63,7 +75,9 @@ if (!empty($_POST)) {
   }
   // Return Listings by DMQL
   else if (array_key_exists("getListingsByDMQL", $_POST)) {
-    $results = $getRets->getRETSListing()->getListingsByDMQL($dmql, $exampleSource, "Residential");
+    $results = $getRets->getRETSListing()
+                       ->setSortBy($sortBy)->setReverseSort($reverseSort)
+                       ->getListingsByDMQL($dmql, $exampleSource, "Residential");
     if (!empty($results)) {
       if ($results->success && !empty($results->data)) {
         $listings = $results->data;
@@ -83,6 +97,23 @@ if (!empty($_POST)) {
   else if (!empty($_POST['parseGoogleResults'])) {
     $googlResults = $_POST['googleResults'];
     $rawData = $getRets->getGeocoding()->parseGoogleResults($googlResults);
+  }
+}
+
+// Listing Details
+$detail = null;
+if (array_key_exists("source", $_GET) && array_key_exists("type", $_GET) && array_key_exists("id", $_GET)) {
+  $listingSource = $_GET['source'];
+  $listingType = $_GET['type'];
+  $listingId = $_GET['id'];
+
+  $disableCache = !empty($_GET["disableCache"]);
+
+  if ($disableCache) {
+    $detail = $getRets->getRETSListing()->details($listingSource, $listingType, $listingId);
+  }
+  else {
+    $detail = $getRets->getListing()->details($listingSource, $listingType, $listingId);
   }
 }
 
@@ -137,6 +168,7 @@ if (!empty($_POST)) {
           <ul class="nav navbar-nav" id="tabs">
             <li><a href="#searching" data-toggle="tab">Searching</a></li>
             <li><a href="#images" data-toggle="tab">Images</a></li>
+            <li><a href="#details" data-toggle="tab">Details</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -234,32 +266,34 @@ if (!empty($_POST)) {
             ================================-->
             <hr>
             <div id="searchByKeyword" class="content section">
-              <h3>searchByKeyword</h3>
-              <p>
-                Avaialble for both cached (<a href="https://github.com/timitek/getrets-php-sdk#searchbykeyword" target="_blank">getListing</a>) and RETS (<a href="https://github.com/timitek/getrets-php-sdk#searchbykeyword-1" target="_blank">getRETSListing</a>).
-              </p>
-              <blockquote>
-              <p>Search for listings by keyword</p>
-              </blockquote>
 
-              <p><a href="http://getrets.net/swagger/ui/index#!/Listing/Listing_SearchByKeyword">Swagger Documentation</a></p>
-
-              <div class="highlight highlight-text-html-php"><pre><span class="pl-s1">(<span class="pl-k">new</span> <span class="pl-c1">GetRETS</span>(<span class="pl-smi">$customerKey</span>))<span class="pl-k">-&gt;</span>getListing()<span class="pl-k">-&gt;</span>searchByKeyword(<span class="pl-smi">$preparedKeywords</span>);</span></pre></div>
-
-              <p>A simple search that will retrieve listings by a keyword search.</p>
-              <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) . '#searchResults' ?>"  method="post">
-                <div class="form-group">
-                  <label for="keywords">Keywords</label>
-                  <input class="form-control" id="keywords" name="keywords" placeholder="Enter keywords (address, listing id, etc..)" value="<?= $keywords ?>">
+              <div class="panel panel-primary">
+                <div class="panel-heading"><h3 class="panel-title">searchByKeyword</h3></div>
+                <div class="panel-body">
+                  <p>Available for both cached (<a href="https://github.com/timitek/getrets-php-sdk#searchbykeyword" target="_blank">documentation</a>) and RETS (<a href="https://github.com/timitek/getrets-php-sdk#searchbykeyword-1" target="_blank">documentation</a>).</p>
+                  <blockquote><p>Search for listings by keyword</p></blockquote>
+                  <p><a href="http://getrets.net/swagger/ui/index#!/Listing/Listing_SearchByKeyword" target="_blank">Swagger Documentation</a></p>
+                  <pre>(new GetRETS($customerKey))->getListing()->searchByKeyword($preparedKeywords);</pre>
+                  <p>A simple search that will retrieve listings by a keyword search.</p>
                 </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" name="disableCache" value="true" <?= ($disableCache ? 'checked' : '') ?> /> 
-                    Use non cached direct RETS Data
-                  </label>
-                </div>
-                <button type="submit" class="btn btn-default" name="searchByKeyword">Search</button>
-              </form>              
+              </div>
+
+              <div class="well well-lg">
+                <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) . '#searchResults' ?>"  method="post">
+                  <div class="form-group">
+                    <label for="keywords">Keywords</label>
+                    <input class="form-control" id="keywords" name="keywords" placeholder="Enter keywords (address, listing id, etc..)" value="<?= $keywords ?>">
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="disableCache" value="true" <?= ($disableCache ? 'checked' : '') ?> /> 
+                      Use non cached direct RETS Data
+                    </label>
+                  </div>
+                  <button type="submit" class="btn btn-primary" name="searchByKeyword">Search</button>
+                </form>
+              </div>
+
             </div>
 
             <!--================================
@@ -267,58 +301,60 @@ if (!empty($_POST)) {
             ================================-->
             <hr>
             <div id="search" class="content section">
-              <h3>search</h3>
-              <p>
-                Avaialble for both cached (<a href="https://github.com/timitek/getrets-php-sdk#search" target="_blank">getListing</a>) and RETS (<a href="https://github.com/timitek/getrets-php-sdk#search-1" target="_blank">getRETSListing</a>).
-              </p>
-              <blockquote>
-              <p>Advanced search</p>
-              </blockquote>
 
-              <p><a href="http://getrets.net/swagger/ui/index#!/Listing/Listing_Search">Swagger Documentation</a></p>
+              <div class="panel panel-primary">
+                <div class="panel-heading"><h3 class="panel-title">search</h3></div>
+                <div class="panel-body">
+                  <p>Available for both cached (<a href="https://github.com/timitek/getrets-php-sdk#search" target="_blank">documentation</a>) and RETS (<a href="https://github.com/timitek/getrets-php-sdk#search-1" target="_blank">documentation</a>).</p>
+                  <blockquote><p>Advanced search</p></blockquote>
+                  <p><a href="http://getrets.net/swagger/ui/index#!/Listing/Listing_Search" target="_blank">Swagger Documentation</a></p>
+                  <pre>(new GetRETS($customerKey))->getListing()->search($keywords, $maxPrice, $minPrice, $includeResidential, $includeLand, $includeCommercial);</pre>
+                  <p>A more advanced search that retrieves listings constrained by the optional parameters.</p>
+                </div>
+              </div>
 
-              <div class="highlight highlight-text-html-php"><pre><span class="pl-s1">(<span class="pl-k">new</span> <span class="pl-c1">GetRETS</span>(<span class="pl-smi">$customerKey</span>))<span class="pl-k">-&gt;</span>getListing()<span class="pl-k">-&gt;</span>search(<span class="pl-smi">$keywords</span>, <span class="pl-smi">$maxPrice</span>, <span class="pl-smi">$minPrice</span>, <span class="pl-smi">$includeResidential</span>, <span class="pl-smi">$includeLand</span>, <span class="pl-smi">$includeCommercial</span>);</span></pre></div>
+              <div class="well well-lg">
+                <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) . '#searchResults' ?>"  method="post">
+                  <div class="form-group">
+                    <label for="keywords">Keywords</label>
+                    <input class="form-control" id="keywords" name="keywords" placeholder="Enter keywords (address, listing id, etc..)" value="<?= $keywords ?>">
+                  </div>
+                  <div class="form-group">
+                    <label for="maxPrice">Max Price</label>
+                    <input class="form-control" id="maxPrice" name="maxPrice" placeholder="Max Price" value="<?= $maxPrice ?>">
+                  </div>
+                  <div class="form-group">
+                    <label for="minPrice">Min Price</label>
+                    <input class="form-control" id="minPrice" name="minPrice" placeholder="Min Price" value="<?= $minPrice ?>">
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="includeResidential" value="true" <?= ($includeResidential ? 'checked' : '') ?> /> 
+                      Include Residential
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="includeLand" value="true" <?= ($includeLand ? 'checked' : '') ?> /> 
+                      Include Land
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="includeCommercial" value="true" <?= ($includeCommercial ? 'checked' : '') ?> /> 
+                      Include Commercial
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="disableCache" value="true" <?= ($disableCache ? 'checked' : '') ?> /> 
+                      Use non cached direct RETS Data
+                    </label>
+                  </div>
+                  <button type="submit" class="btn btn-primary" name="search">Search</button>
+                </form>
+              </div>
 
-              <p>A more advanced search that retrieves listings constrained by the optional parameters.</p>              
-              <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) . '#searchResults' ?>"  method="post">
-                <div class="form-group">
-                  <label for="keywords">Keywords</label>
-                  <input class="form-control" id="keywords" name="keywords" placeholder="Enter keywords (address, listing id, etc..)" value="<?= $keywords ?>">
-                </div>
-                <div class="form-group">
-                  <label for="maxPrice">Max Price</label>
-                  <input class="form-control" id="maxPrice" name="maxPrice" placeholder="Max Price" value="<?= $maxPrice ?>">
-                </div>
-                <div class="form-group">
-                  <label for="minPrice">Min Price</label>
-                  <input class="form-control" id="minPrice" name="minPrice" placeholder="Min Price" value="<?= $minPrice ?>">
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" name="includeResidential" value="true" <?= ($includeResidential ? 'checked' : '') ?> /> 
-                    Include Residential
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" name="includeLand" value="true" <?= ($includeLand ? 'checked' : '') ?> /> 
-                    Include Land
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" name="includeCommercial" value="true" <?= ($includeCommercial ? 'checked' : '') ?> /> 
-                    Include Commercial
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" name="disableCache" value="true" <?= ($disableCache ? 'checked' : '') ?> /> 
-                    Use non cached direct RETS Data
-                  </label>
-                </div>
-                <button type="submit" class="btn btn-default" name="search">Search</button>
-              </form>              
             </div>
 
 
@@ -327,23 +363,28 @@ if (!empty($_POST)) {
             ================================-->
             <hr>
             <div id="getListingsByDMQL" class="content section">
-              <h3>getListingsByDMQL</h3>
-              <p>
-                RETS Only (<a href="https://github.com/timitek/getrets-php-sdk#getlistingsbydmql" target="_blank">getRETSListing</a>).
-              </p>
-              <blockquote>
-                <p>Get translated listings by DMQL query</p>
-              </blockquote>
-              <p><a href="http://getrets.net/swagger/ui/index#!/RETSListing/RETSListing_GetListingsByDMQL">Swagger Documentation</a></p>
-              <div class="highlight highlight-text-html-php"><pre><span class="pl-s1">(<span class="pl-k">new</span> <span class="pl-c1">GetRETS</span>(<span class="pl-smi">$customerKey</span>))<span class="pl-k">-&gt;</span>getRETSListing()<span class="pl-k">-&gt;</span>getListingsByDMQL(<span class="pl-smi">$query</span>, <span class="pl-smi">$feedName</span>, <span class="pl-smi">$listingType</span>);</span></pre></div>              
-              <p>This is a powerful function that will execute raw DMQL against the RETS MLS server and will return the results as a serialized object.  It is similar to executeDMQL, however this function will <strong>translate</strong> data to be in the same format as returned by other methods that retrieve listing details.</p>
-              <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) . '#searchResults' ?>"  method="post">
-                <div class="form-group">
-                  <label for="dmql">DMQL</label>
-                  <textarea class="form-control" id="dmql" name="dmql" rows="3" <?= ($isPublic ? 'disabled' : '') ?>><?= $dmql ?></textarea>
+
+              <div class="panel panel-primary">
+                <div class="panel-heading"><h3 class="panel-title">getListingsByDMQL</h3></div>
+                <div class="panel-body">
+                  <p>RETS Only (<a href="https://github.com/timitek/getrets-php-sdk#getlistingsbydmql" target="_blank">documentation</a>).</p>
+                  <blockquote><p>Get translated listings by DMQL query</p></blockquote>
+                  <p><a href="http://getrets.net/swagger/ui/index#!/RETSListing/RETSListing_GetListingsByDMQL" target="_blank">Swagger Documentation</a></p>
+                  <pre>(new GetRETS($customerKey))->getRETSListing()->getListingsByDMQL($query, $feedName, $listingType);</pre>
+                  <p>This is a powerful function that will execute raw DMQL against the RETS MLS server and will return the results as a serialized object.  It is similar to executeDMQL, however this function will <strong>translate</strong> data to be in the same format as returned by other methods that retrieve listing details.</p>
                 </div>
-                <button type="submit" class="btn btn-default" name="getListingsByDMQL">Get Listings By DMQL</button>
-              </form>              
+              </div>
+
+              <div class="well well-lg">
+                <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) . '#searchResults' ?>"  method="post">
+                  <div class="form-group">
+                    <label for="dmql">DMQL</label>
+                    <textarea class="form-control" id="dmql" name="dmql" rows="3" <?= ($isPublic ? 'disabled' : '') ?>><?= $dmql ?></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary" name="getListingsByDMQL">Get Listings By DMQL</button>
+                </form>
+              </div>
+
             </div>
 
             <!--================================
@@ -351,34 +392,35 @@ if (!empty($_POST)) {
             ================================-->
             <hr>
             <div id="executeDMQL" class="content section">
-              <h3>executeDMQL</h3>
-              <p>
-                RETS Only (<a href="https://github.com/timitek/getrets-php-sdk#executedmql" target="_blank">getRETSListing</a>).
-              </p>
-              <blockquote>
-              <p>Return MLS results via a DMQL query</p>
-              </blockquote>
 
-              <p><a href="http://getrets.net/swagger/ui/index#!/RETSListing/RETSListing_ExecuteDMQL">Swagger Documentation</a></p>
-
-              <div class="highlight highlight-text-html-php"><pre><span class="pl-s1">(<span class="pl-k">new</span> <span class="pl-c1">GetRETS</span>(<span class="pl-smi">$customerKey</span>))<span class="pl-k">-&gt;</span>getRETSListing()<span class="pl-k">-&gt;</span>executeDMQL(<span class="pl-smi">$query</span>, <span class="pl-smi">$feedName</span>, <span class="pl-smi">$listingType</span>);</span></pre></div>
-
-              <p>This is a powerful function that will execute raw DMQL against the RETS MLS server and will return the results as a serialized object.</p>
-
-              <p><strong><em>Special Note</em></strong> - These results will not be returned in a translated fashion similiar to the other listing detail searches.  These results are in the format as returned from the MLS RETS server.  If you wish to retrieve listings in a <strong>translated</strong> format use getListingsByDMQL.</p>
-              <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) . '#executeDMQL' ?>"  method="post">
-                <div class="form-group">
-                  <label for="dmql">DMQL</label>
-                  <textarea class="form-control" id="dmql" name="dmql" rows="3" <?= ($isPublic ? 'disabled' : '') ?>><?= $dmql ?></textarea>
+              <div class="panel panel-primary">
+                <div class="panel-heading"><h3 class="panel-title">executeDMQL</h3></div>
+                <div class="panel-body">
+                  <p>RETS Only (<a href="https://github.com/timitek/getrets-php-sdk#executedmql" target="_blank">documentation</a>).</p>
+                  <blockquote><p>Return MLS results via a DMQL query</p></blockquote>
+                  <p><a href="http://getrets.net/swagger/ui/index#!/RETSListing/RETSListing_ExecuteDMQL" target="_blank">Swagger Documentation</a></p>
+                  <pre>(new GetRETS($customerKey))->getRETSListing()->executeDMQL($query, $feedName, $listingType);</pre>
+                  <p>This is a powerful function that will execute raw DMQL against the RETS MLS server and will return the results as a serialized object.</p>
+                  <p><strong><em>Special Note</em></strong> - These results will not be returned in a translated fashion similiar to the other listing detail searches.  These results are in the format as returned from the MLS RETS server.  If you wish to retrieve listings in a <strong>translated</strong> format use getListingsByDMQL.</p>
                 </div>
-                <button type="submit" class="btn btn-default" name="executeDMQL">Execute DMQL (returns raw serialized results)</button>
-              </form>
+              </div>
 
-              <?php if (!empty($rawData)): ?>
-              <pre>
-                <?= json_encode($rawData, JSON_PRETTY_PRINT) ?>
-              </pre>
-              <?php endif; ?>
+              <div class="well well-lg">
+                <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) . '#executeDMQL' ?>"  method="post">
+                  <div class="form-group">
+                    <label for="dmql">DMQL</label>
+                    <textarea class="form-control" id="dmql" name="dmql" rows="3" <?= ($isPublic ? 'disabled' : '') ?>><?= $dmql ?></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary" name="executeDMQL">Execute DMQL (returns raw serialized results)</button>
+                </form>
+
+                <?php if (!empty($rawData)): ?>
+                <pre>
+                  <?= json_encode($rawData, JSON_PRETTY_PRINT) ?>
+                </pre>
+                <?php endif; ?>
+              </div>
+
             </div>
             
             <!--================================
@@ -388,16 +430,67 @@ if (!empty($_POST)) {
             <div id="searchResults" class="content section">
               <h3>Search Results</h3>
               <ul class="nav nav-tabs">
-                <li role="presentation" class="active" id="searchResultsNavRendered"><a href="javascript:void(0);">Rendered</a></li>
+                <li role="presentation" class="active" id="searchResultsNavResults"><a href="javascript:void(0);">Results</a></li>
                 <li role="presentation" id="searchResultsNavVarDump"><a href="javascript:void(0);">Var Dump</a></li>
               </ul>
-              <div id="searchResultsRendered">
+              <div id="searchResultsResults">
+
+                <!--================================
+                Sorting
+                ================================-->
                 <div class="row">
-                  <?php if (empty($listings)): ?>
-                    <div class="col-xs-12">
-                      <h3>No Results</h3>
-                    </div>
-                  <?php endif; ?>
+                  <div class="col-xs-12">
+                    <?php if (empty($listings)): ?>
+                      <div class="well well-sm text-center">
+                        <h3><strong>No</strong> Results</h3>
+                      </div>
+                    <?php else: ?>
+                      <br />
+                      <div class="panel panel-primary">
+                        <div class="panel-heading"><h3 class="panel-title">setSortBy / setReverseSort</h3></div>
+                        <div class="panel-body">
+                          <blockquote><p>Used for sorting / ordering the results that are returned</p></blockquote>
+                          <p><a href="https://github.com/timitek/getrets-php-sdk#setsortby--setreversesort" target="_blank">Documentation</a></p>
+                          <pre>(new GetRETS($customerKey))->getListing()->setSortBy("providedBy")->setReverseSort(true)->searchByKeyword($preparedKeywords);</pre>
+                        </div>
+                      </div>
+
+                      <div class="well well-lg">
+                        <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) . '#searchResults' ?>"  method="post" class="form-inline">
+                          <?php foreach ($_POST as $key => $value): ?>
+                            <input type="hidden" name="<?= $key ?>" value="<?= $value ?>" />
+                          <?php endforeach; ?>
+
+                          <div class="form-group">
+                            <p class="form-control-static"><strong>Sort By:</strong></p>
+                          </div>
+                          <div class="form-group">
+                            <select class="form-control" name="sortBy">
+                              <?php foreach ($listings[0] as $key => $value): ?>
+                                <option<?= $key === $sortBy ? ' selected="true"' : '' ?>><?= $key ?></option>
+                              <?php endforeach; ?>
+                            </select>
+                          </div>
+
+                          <div class="form-group">
+                            <p class="form-control-static"><strong>Reverse Sort:</strong></p>
+                          </div>
+                          <div class="form-group">
+                            <input type="checkbox" name="reverseSort" value="true" <?= ($reverseSort ? 'checked' : '') ?> />
+                          </div>
+                          
+                          <button type="submit" class="btn btn-primary" name="applySort">Apply Sort</button>
+                        </form>
+                      </div>
+                    <?php endif; ?>
+
+                  </div>
+                </div>
+
+                <!--================================
+                Listings
+                ================================-->
+                <div class="row">
                   <?php foreach ($listings as $listing): ?>
                   <div class="col-xs-12 col-md-6">
                     <div class="thumbnail" style="min-height: 450px;">
@@ -420,7 +513,7 @@ if (!empty($_POST)) {
                         </div>
                         <div class="pull-right">
                           <a class="btn btn-primary" role="button"
-                            href="#details?<?= http_build_query(['source'=>$listing->listingSourceURLSlug,'type'=>$listing->listingTypeURLSlug,'id'=>$listing->listingID], null, '&', PHP_QUERY_RFC3986) ?>">
+                            href="?<?= http_build_query(['source'=>$listing->listingSourceURLSlug,'type'=>$listing->listingTypeURLSlug,'id'=>$listing->listingID], null, '&', PHP_QUERY_RFC3986) ?><?= $disableCache ? '&disableCache=1' : '' ?>#details">
                             Details
                           </a>
                         </div>
@@ -439,6 +532,119 @@ if (!empty($_POST)) {
 
           </div>
         </div>
+      </div>
+
+      <div class="tab-pane" id="details">
+        <?php if (!empty($detail)): ?>
+        <pre>
+          <?= json_encode($detail, JSON_PRETTY_PRINT) ?>
+        </pre>
+
+
+
+<div id='getrets-content' class='getrets-content'>
+    <div id='getrets-details' class='getrets-details'>
+        <div id='getrets-details-title' class='getrets-title'>
+            Details
+        </div>
+        <?php if ($detail->address): ?>
+        <div id='getrets-detail-address' class='getrets-detail'>
+            <span id='getrets-label-address' class='getrets-label'>Address:</span> <span id='getrets-value-address' class='getrets-value'><?= $detail->address; ?></span>
+        </div>
+        <?php endif; ?>
+        <?php if ($detail->listPrice): ?>
+        <div id='getrets-detail-listprice' class='getrets-detail'>
+            <span id='getrets-label-listprice' class='getrets-label'>List Price:</span> <span id='getrets-value-listprice' class='getrets-value'><?= $detail->listPrice; ?></span>
+        </div>
+        <?php endif; ?>
+        <?php if ($detail->listingTypeURLSlug): ?>
+        <div id='getrets-detail-listingtype' class='getrets-listingtype'>
+            <span id='getrets-label-listingtype' class='getrets-label'>Listing Type:</span> <span id='getrets-value-listingtype' class='getrets-value'><?= $detail->listingTypeURLSlug; ?></span>
+        </div>
+        <?php endif; ?>
+        <?php if ($detail->listingID): ?>
+        <div id='getrets-detail-listingid' class='getrets-listingid'>
+            <span id='getrets-label-listingid' class='getrets-label'>Listing ID:</span> <span id='getrets-value-listingid' class='getrets-value'><?= $detail->listingID; ?></span>
+        </div>
+        <?php endif; ?>
+        <?php if ($detail->squareFeet): ?>
+        <div id='getrets-detail-squarefeet' class='getrets-detail'>
+            <span id='getrets-label-squarefeet' class='getrets-label'>Square Feet:</span> <span id='getrets-value-squarefeet' class='getrets-value'><?= $detail->squareFeet; ?></span>
+        </div>
+        <?php endif; ?>
+        <?php if ($detail->beds): ?>
+        <div id='getrets-detail-beds' class='getrets-detail'>
+            <span id='getrets-label-beds' class='getrets-label'>Beds:</span> <span id='getrets-value-beds' class='getrets-value'><?= $detail->beds; ?></span>
+        </div>
+        <?php endif; ?>
+        <?php if ($detail->baths): ?>
+        <div id='getrets-detail-baths' class='getrets-detail'>
+            <span id='getrets-label-baths' class='getrets-label'>Baths:</span> <span id='getrets-value-baths' class='getrets-value'><?= $detail->baths; ?></span>
+        </div>
+        <?php endif; ?>
+        <?php if ($detail->acres): ?>
+        <div id='getrets-detail-acres' class='getrets-detail'>
+            <span id='getrets-label-acres' class='getrets-label'>Acres:</span> <span id='getrets-value-acres' class='getrets-value'><?= $detail->acres; ?></span>
+        </div>
+        <?php endif; ?>
+        <?php if ($detail->lot): ?>
+        <div id='getrets-detail-lot' class='getrets-detail'>
+            <span id='getrets-label-lot' class='getrets-label'>Lot:</span> <span id='getrets-value-lot' class='getrets-value'><?= $detail->lot; ?></span>
+        </div>
+        <?php endif; ?>
+    </div>
+    <div id='getrets-description' class='getrets-description'>
+        <div id='getrets-description-title' class='getrets-title'>
+            Description
+        </div>
+        <?= $description; ?>
+    </div>
+    <?php if ($detail->features): ?>
+    <div id='getrets-features' class='getrets-features'>
+        <div id='getrets-features-title' class='getrets-title'>
+            Features
+        </div>
+        <ul>
+            <?php foreach( $detail->features as $item ): ?>
+            <li><?= $item ?></li>
+            <?php endforeach; ?>
+        </ul>        
+    </div>
+    <?php endif; ?>
+    <?php if ($detail->photoCount > 0): ?>
+    <div id='getrets-photos' class='getrets-photos'>
+        <div id='getrets-photos-title' class='getrets-title'>
+            Photos
+        </div>
+        <?php
+        for ($i = 0; $i < $detail->photoCount; $i++) {
+            $img = $getRets->getListing()->imageUrl($detail->listingSourceURLSlug, $detail->listingTypeURLSlug, $detail->listingID, $i);	
+            echo "<div class='getrets-photo-responsive'><div class='getrets-photo-container'><a target='_blank' href='" . $img . "' class='getrets-photos-link'><img src='" . $img . "?newWidth=200&maxHeight=200' class='getrets-photo' width='200' height='200' /></a></div></div>"; 
+        }
+        unset($photo);
+        ?>
+        <div class="clearfix"></div>
+    </div>
+    <?php endif; ?>
+    <div id='getrets-providedby' class='getrets-providedby'>
+        <span id='getrets-providedby-label' class='getrets-label'>Provided By:</span> <span id='getrets-providedby-value' class='getrets-value'><?= $detail->providedBy; ?></span>
+    </div>
+</div>        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <?php endif; ?>
       </div>
 
       <div class="tab-pane" id="images">
@@ -493,27 +699,27 @@ if (!empty($_POST)) {
       });
 
       /* search results tabs */
-      var searchResultsNavRendered = $('#searchResultsNavRendered');
+      var searchResultsNavResults = $('#searchResultsNavResults');
       var searchResultsNavVarDump = $('#searchResultsNavVarDump');
-      var handleSearchResultsNav = function (showRendered) {
-        var searchResultsRendered = $('#searchResultsRendered');
+      var handleSearchResultsNav = function (showResults) {
+        var searchResultsResults = $('#searchResultsResults');
         var searchResultsVarDump = $('#searchResultsVarDump');
 
-        searchResultsNavRendered.removeClass("active");
+        searchResultsNavResults.removeClass("active");
         searchResultsNavVarDump.removeClass("active");
-        searchResultsRendered.hide();
+        searchResultsResults.hide();
         searchResultsVarDump.hide();
 
-        if (showRendered) {
-          searchResultsNavRendered.addClass("active");
-          searchResultsRendered.show();
+        if (showResults) {
+          searchResultsNavResults.addClass("active");
+          searchResultsResults.show();
         }
         else {
           searchResultsNavVarDump.addClass("active");
           searchResultsVarDump.show();
         }
       };
-      searchResultsNavRendered.click(function() { handleSearchResultsNav(true); });
+      searchResultsNavResults.click(function() { handleSearchResultsNav(true); });
       searchResultsNavVarDump.click(function() { handleSearchResultsNav(false); });
 
 
