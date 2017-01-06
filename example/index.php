@@ -503,13 +503,13 @@ if (array_key_exists("source", $_GET) && array_key_exists("type", $_GET) && arra
                         <h3><?= $listing->address ?></h3>
                         <div class="getrets-features">
                           <ul>
-                            <li><strong>Type:</strong> <?= $detail->listingTypeURLSlug; ?></li>
-                            <li><strong>Price:</strong> <?= $detail->listPrice; ?></li>
-                            <li><strong>Beds:</strong> <?= $detail->beds; ?></li>
-                            <li><strong>Baths:</strong> <?= $detail->baths; ?></li>
-                            <li><strong><abbr title="Square Feet">Sqft.</abbr>:</strong> <?= $detail->squareFeet; ?></li>
+                            <li><strong>Type:</strong> <?= $listing->listingTypeURLSlug; ?></li>
+                            <li><strong>Price:</strong> <?= $listing->listPrice; ?></li>
+                            <li><strong>Beds:</strong> <?= $listing->beds; ?></li>
+                            <li><strong>Baths:</strong> <?= $listing->baths; ?></li>
+                            <li><strong><abbr title="Square Feet">Sqft.</abbr>:</strong> <?= $listing->squareFeet; ?></li>
                             <li><strong>Lot:</strong> <?= $listing->lot; ?></li>
-                            <li><strong>Acres:</strong> <?= $detail->acres; ?></li>
+                            <li><strong>Acres:</strong> <?= $listing->acres; ?></li>
                           </ul>
                         </div>
                         <div class="pull-right">
