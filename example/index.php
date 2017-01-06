@@ -205,7 +205,7 @@ if (array_key_exists("source", $_GET) && array_key_exists("type", $_GET) && arra
             <p class="lead">
               <strong>GetRETS&reg;</strong> is a product / service developed by <a href="http://www.timitek.com/" target="_blank">timitek</a>
               that makes it possible to quickly build real estate related applications for pulling listing data from
-              sevreal MLS's without having to know anything about RETS or IDX or worry about the pains of mapping and 
+              several MLS's without having to know anything about RETS or IDX or worry about the pains of mapping and 
               storing listing data from these various sources.
               <br /><br />
 
