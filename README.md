@@ -214,7 +214,7 @@ Retrieves an image(s) associated with a specific listing.
 
 ***Special Note*** - While the width and height parameters are optional, using them to specify an appropriate image size will increase the speed in which your site renders by lowering the need to download a full size image.
 
-Also, fetching the first photo ($photoId) is a suggested strategy for displaying a thumbnail image.
+Also, fetching the first photo ($photoId = 0) is a suggested strategy for displaying a thumbnail image.
 
 ### Parameters
 
@@ -412,7 +412,7 @@ Retrieves an image(s) associated with a specific listing.
 
 ***Special Note*** - While the width and height parameters are optional, using them to specify an appropriate image size will increase the speed in which your site renders by lowering the need to download a full size image.
 
-Also, fetching the first photo ($photoId) is a suggested strategy for displaying a thumbnail image.
+Also, fetching the first photo ($photoId = 0) is a suggested strategy for displaying a thumbnail image.
 
 ### Parameters
 

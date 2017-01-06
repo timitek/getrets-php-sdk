@@ -4,7 +4,7 @@ include "../GetRETS.php";
 
 ini_set('max_execution_time', 300);  // Give enough time (5 mintues) for slow DMQL queries
 
-$customerKey = 'aspirerealty';
+$customerKey = '';
 
 $isPublic = false;
 $exampleAddress = "sheridan, ar";
@@ -145,6 +145,7 @@ if (array_key_exists("source", $_GET) && array_key_exists("type", $_GET) && arra
     <style>
     .content {padding-top: 80px ;padding-bottom: 20px}
     @media (min-width:768px) { #searching .list-group {position: fixed; width:18%;} }
+    @media (min-width:768px) { #details .list-group {position: fixed; width:18%;} }
     .getrets-features ul { column-count: 2; -moz-column-count: 2; -webkit-column-count: 2; }
     .getrets-features ul li { list-style-type: none; }
     </style>
@@ -167,7 +168,6 @@ if (array_key_exists("source", $_GET) && array_key_exists("type", $_GET) && arra
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav" id="tabs">
             <li><a href="#searching" data-toggle="tab">Searching</a></li>
-            <li><a href="#images" data-toggle="tab">Images</a></li>
             <li><a href="#details" data-toggle="tab">Details</a></li>
           </ul>
         </div><!--/.nav-collapse -->
@@ -254,10 +254,10 @@ if (array_key_exists("source", $_GET) && array_key_exists("type", $_GET) && arra
             <p class="lead">
               There are 4 ways to search for listings.
               <ol>
-                <li><a href="#searchByKeyword">searchByKeyword</a> - <i>(applicable for both <strong>cached</strong> and <strong>RETS</strong>)</i></li>
-                <li><a href="#search">search</a> - <i>(applicable for both <strong>cached</strong> and <strong>RETS</strong>)</i></li>
-                <li><a href="#getListingsByDMQL">getListingsByDMQL</a> - <i>(<strong>RETS</strong> Only)</i></li>
-                <li><a href="#executeDMQL">executeDMQL</a> - <i>(<strong>RETS</strong> only)</i></li>
+                <li><a href="#searchByKeyword">searchByKeyword</a> - <em>(applicable for both <strong>cached</strong> and <strong>RETS</strong>)</em></li>
+                <li><a href="#search">search</a> - <em>(applicable for both <strong>cached</strong> and <strong>RETS</strong>)</em></li>
+                <li><a href="#getListingsByDMQL">getListingsByDMQL</a> - <em>(<strong>RETS</strong> Only)</em></li>
+                <li><a href="#executeDMQL">executeDMQL</a> - <em>(<strong>RETS</strong> only)</em></li>
               </ol>
             </p>
 
@@ -416,7 +416,7 @@ if (array_key_exists("source", $_GET) && array_key_exists("type", $_GET) && arra
 
                 <?php if (!empty($rawData)): ?>
                 <pre>
-                  <?= json_encode($rawData, JSON_PRETTY_PRINT) ?>
+                  <?= var_dump($rawData); ?>
                 </pre>
                 <?php endif; ?>
               </div>
@@ -430,10 +430,11 @@ if (array_key_exists("source", $_GET) && array_key_exists("type", $_GET) && arra
             <div id="searchResults" class="content section">
               <h3>Search Results</h3>
               <ul class="nav nav-tabs">
-                <li role="presentation" class="active" id="searchResultsNavResults"><a href="javascript:void(0);">Results</a></li>
-                <li role="presentation" id="searchResultsNavVarDump"><a href="javascript:void(0);">Var Dump</a></li>
+                <li role="presentation" class="active" id="searchResultsNavMain"><a href="javascript:void(0);">Results</a></li>
+                <li role="presentation" id="searchResultsNavData"><a href="javascript:void(0);">Data</a></li>
               </ul>
-              <div id="searchResultsResults">
+
+              <div id="searchResultsMain">
 
                 <!--================================
                 Sorting
@@ -502,13 +503,13 @@ if (array_key_exists("source", $_GET) && array_key_exists("type", $_GET) && arra
                         <h3><?= $listing->address ?></h3>
                         <div class="getrets-features">
                           <ul>
-                            <li><strong>Type:</strong> <?= $listing->listingTypeURLSlug ?></li>
-                            <li><strong>Price:</strong> <?= $listing->listPrice ?></li>
-                            <li><strong>Beds:</strong> <?= $listing->beds ?></li>
-                            <li><strong>Baths:</strong> <?= $listing->baths ?></li>
-                            <li><strong><abbr title="Square Feet">Sqft.</abbr>:</strong> <?= $listing->squareFeet ?></li>
-                            <li><strong>Lot:</strong> <?= $listing->lot ?></li>
-                            <li><strong>Price:</strong> <?= $listing->listingTypeURLSlug ?></li>
+                            <li><strong>Type:</strong> <?= $detail->listingTypeURLSlug; ?></li>
+                            <li><strong>Price:</strong> <?= $detail->listPrice; ?></li>
+                            <li><strong>Beds:</strong> <?= $detail->beds; ?></li>
+                            <li><strong>Baths:</strong> <?= $detail->baths; ?></li>
+                            <li><strong><abbr title="Square Feet">Sqft.</abbr>:</strong> <?= $detail->squareFeet; ?></li>
+                            <li><strong>Lot:</strong> <?= $listing->lot; ?></li>
+                            <li><strong>Acres:</strong> <?= $detail->acres; ?></li>
                           </ul>
                         </div>
                         <div class="pull-right">
@@ -523,7 +524,7 @@ if (array_key_exists("source", $_GET) && array_key_exists("type", $_GET) && arra
                   <?php endforeach; ?>
                 </div>              
               </div>
-              <div id="searchResultsVarDump" style="display: none;">
+              <div id="searchResultsData" style="display: none;">
                 <pre>
                   <?php var_dump($listings); ?>
                 </pre>
@@ -534,122 +535,214 @@ if (array_key_exists("source", $_GET) && array_key_exists("type", $_GET) && arra
         </div>
       </div>
 
+
+      <!--================================
+      Details
+      ================================-->
       <div class="tab-pane" id="details">
-        <?php if (!empty($detail)): ?>
-        <pre>
-          <?= json_encode($detail, JSON_PRETTY_PRINT) ?>
-        </pre>
+
+        <div class="row">
+          
+          <div class="col-sm-3">
+            <div class="list-group">
+              <a class="list-group-item" href="#detailsSection">details</a>
+              <a class="list-group-item" href="#imageUrl">imageUrl</a>
+            </div>
+          </div>
+
+          <div class="col-sm-9">
+            <h1>Details</h1>
+            <p class="lead">
+              Listings contain more advanced details / meta data and images.
+              <ol>
+                <li><a href="#detailsSection">details</a> - <em>(applicable for both <strong>cached</strong> and <strong>RETS</strong>)</em></li>
+                <li><a href="#imageUrl">imageUrl</a> - <em>(applicable for both <strong>cached</strong> and <strong>RETS</strong>)</em></li>
+              </ol>
+            </p>
+
+            <!--================================
+            details
+            ================================-->
+            <hr>
+            <div id="detailsSection" class="content section">
+
+              <div class="panel panel-primary">
+                <div class="panel-heading"><h3 class="panel-title">details</h3></div>
+                <div class="panel-body">
+                  <p>Available for both cached (<a href="https://github.com/timitek/getrets-php-sdk#details" target="_blank">documentation</a>) and RETS (<a href="https://github.com/timitek/getrets-php-sdk#details-1" target="_blank">documentation</a>).</p>
+                  <blockquote><p>Get details for a specific listing</p></blockquote>
+                  <p><a href="http://getrets.net/swagger/ui/index#!/Listing/Listing_GetListingDetails" target="_blank">Swagger Documentation</a></p>
+                  <pre>(new GetRETS($customerKey))->getListing()->details($listingSource, $listingType, $listingId);</pre>
+                  <p>Retrieves the more specific / non condensed details for a listing. You will typically use the values returned from search functions as the parameters.</p>
+                </div>
+              </div>
+
+              <?php if (empty($detail)): ?>
+              <div class="well well-lg">
+                <p class="lead">Perform a search first and then select a listing to see the details.</p>
+              </div>
+
+              <?php else: ?>
+              <ul class="nav nav-tabs">
+                <li role="presentation" class="active" id="detailsNavMain"><a href="javascript:void(0);">Results</a></li>
+                <li role="presentation" id="detailsNavData"><a href="javascript:void(0);">Data</a></li>
+              </ul>
+
+              <div id="detailsMain">
+
+                <h1><?= $detail->address; ?><br /><small><?= $detail->listPrice; ?></small></h1>
+                <div class="row">
+
+                  <!--================================
+                  Detail Summary
+                  ================================-->
+                  <div class="col-xs-12 col-md-6">
+                    <div class="row">
+                      <div class="col-xs-6"><small class="pull-left"><strong>Provided By:</strong> <?= $detail->providedBy; ?></small></div>
+                      <div class="col-xs-6"><small class="pull-right"><strong>Listing ID:</strong> <?= $detail->listingID; ?></small></div>
+                      <div class="col-xs-12">
+                        <hr />
+                        <p><?= $detail->description; ?></p>
+                        <div class="getrets-features">
+                          <ul>
+                            <li><strong>Type:</strong> <?= $detail->listingTypeURLSlug; ?></li>
+                            <li><strong>Price:</strong> <?= $detail->listPrice; ?></li>
+                            <li><strong>Beds:</strong> <?= $detail->beds; ?></li>
+                            <li><strong>Baths:</strong> <?= $detail->baths; ?></li>
+                            <li><strong><abbr title="Square Feet">Sqft.</abbr>:</strong> <?= $detail->squareFeet; ?></li>
+                            <li><strong>Lot:</strong> <?= $listing->lot; ?></li>
+                            <li><strong>Acres:</strong> <?= $detail->acres; ?></li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
 
+                  <!--================================
+                  Features
+                  ================================-->
+                  <div class="col-xs-12 col-md-6">
+                    <div class="panel panel-default">
+                      <div class="panel-heading"><h3 class="panel-title">Features</h3></div>
+                      <div class="panel-body">
+                        <div class="getrets-features">
+                          <ul>
+                            <?php foreach($detail->features as $feature): ?>
+                              <li><strong><?= $feature; ?></strong></li>
+                            <?php endforeach; ?>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
 
-<div id='getrets-content' class='getrets-content'>
-    <div id='getrets-details' class='getrets-details'>
-        <div id='getrets-details-title' class='getrets-title'>
-            Details
+              </div>
+
+              <div id="detailsData" style="display: none;">
+                <pre>
+                  <?= var_dump($detail); ?>
+                </pre>
+              </div>
+              <?php endif; ?>
+
+            </div>
+
+
+            <!--================================
+            imageUrl
+            ================================-->
+            <hr>
+            <div id="imageUrl" class="content section">
+
+              <div class="panel panel-primary">
+                <div class="panel-heading"><h3 class="panel-title">imageUrl</h3></div>
+                <div class="panel-body">
+                  <p>Available for both cached (<a href="https://github.com/timitek/getrets-php-sdk#imageurl" target="_blank">documentation</a>) and RETS (<a href="https://github.com/timitek/getrets-php-sdk#imageurl-1" target="_blank">documentation</a>).</p>
+                  <blockquote><p>Get details for a specific listing</p></blockquote>
+                  <p><a href="http://getrets.net/swagger/ui/index#!/Listing/Listing_Image" target="_blank">Swagger Documentation</a></p>
+                  <pre>(new GetRETS($customerKey))->getListing()->imageUrl($listingSource, $listingType, $listingId, $photoId, $width = null, $height = null);</pre>
+                  <p>
+                    Retrieves an image(s) associated with a specific listing.<br /><br />
+                    <strong><em>Special Note</em></strong> - While the width and height parameters are optional, using them to specify an appropriate image size will increase the speed in which your site renders by lowering the need to download a full size image.<br /><br />
+                    Also, fetching the first photo ($photoId = 0) is a suggested strategy for displaying a thumbnail image.
+                  </p>
+                </div>
+              </div>
+
+              <?php if (empty($detail)): ?>
+              <div class="well well-lg">
+                <p class="lead">Perform a search first and then select a listing to see the images.</p>
+              </div>
+
+              <?php else: ?>
+              <div class="row">
+                <!--================================
+                Image Carousel
+                ================================-->
+                <div class="col-xs-12 col-md-6">
+                  <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                    <!-- Indicators -->
+                    <ol class="carousel-indicators">
+                      <?php for ($i = 0; $i < $detail->photoCount; $i++): ?>
+                      <li data-target="#carousel-example-generic" data-slide-to="0" <?= $i===0 ? 'class="active"' : '' ?>></li>
+                      <?php endfor; ?>
+                    </ol>
+
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner" role="listbox">
+                      <?php for ($i = 0; $i < $detail->photoCount; $i++): ?>
+                      <div class="item<?= $i===0 ? ' active' : '' ?>">
+                        <img src="<?= $getRets->getListing()->imageUrl($detail->listingSourceURLSlug, $detail->listingTypeURLSlug, $detail->listingID, $i); ?>" class="img-responsive" alt="..." style="width: 100%;">
+                        <div class="carousel-caption">
+                          Photo <?= $i+1; ?>
+                        </div>
+                      </div>
+                      <?php endfor; ?>
+                    </div>
+
+                    <!-- Controls -->
+                    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                      <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                      <span class="sr-only">Next</span>
+                    </a>
+                  </div>
+                </div>
+
+                <!--================================
+                Thumbnails
+                ================================-->
+                <div class="col-xs-12 col-md-6">
+                  <div class="panel panel-default">
+                    <div class="panel-heading"><h3 class="panel-title">Thumbnails</h3></div>
+                    <div class="panel-body">
+                      <div class="row">
+                      <?php for ($i = 0; $i < $detail->photoCount; $i++): ?>
+                        <?php $imgSrc = $getRets->getListing()->imageUrl($detail->listingSourceURLSlug, $detail->listingTypeURLSlug, $detail->listingID, $i); ?>
+                        <div class="col-xs-6">
+                          <a href="<?= $imgSrc; ?>" target="_blank" class="thumbnail">
+                            <img src="<?= $imgSrc; ?>" alt="...">
+                          </a>
+                        </div>
+                      <?php endfor; ?>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <?php endif; ?>
+
+            </div>
+
+          </div>
         </div>
-        <?php if ($detail->address): ?>
-        <div id='getrets-detail-address' class='getrets-detail'>
-            <span id='getrets-label-address' class='getrets-label'>Address:</span> <span id='getrets-value-address' class='getrets-value'><?= $detail->address; ?></span>
-        </div>
-        <?php endif; ?>
-        <?php if ($detail->listPrice): ?>
-        <div id='getrets-detail-listprice' class='getrets-detail'>
-            <span id='getrets-label-listprice' class='getrets-label'>List Price:</span> <span id='getrets-value-listprice' class='getrets-value'><?= $detail->listPrice; ?></span>
-        </div>
-        <?php endif; ?>
-        <?php if ($detail->listingTypeURLSlug): ?>
-        <div id='getrets-detail-listingtype' class='getrets-listingtype'>
-            <span id='getrets-label-listingtype' class='getrets-label'>Listing Type:</span> <span id='getrets-value-listingtype' class='getrets-value'><?= $detail->listingTypeURLSlug; ?></span>
-        </div>
-        <?php endif; ?>
-        <?php if ($detail->listingID): ?>
-        <div id='getrets-detail-listingid' class='getrets-listingid'>
-            <span id='getrets-label-listingid' class='getrets-label'>Listing ID:</span> <span id='getrets-value-listingid' class='getrets-value'><?= $detail->listingID; ?></span>
-        </div>
-        <?php endif; ?>
-        <?php if ($detail->squareFeet): ?>
-        <div id='getrets-detail-squarefeet' class='getrets-detail'>
-            <span id='getrets-label-squarefeet' class='getrets-label'>Square Feet:</span> <span id='getrets-value-squarefeet' class='getrets-value'><?= $detail->squareFeet; ?></span>
-        </div>
-        <?php endif; ?>
-        <?php if ($detail->beds): ?>
-        <div id='getrets-detail-beds' class='getrets-detail'>
-            <span id='getrets-label-beds' class='getrets-label'>Beds:</span> <span id='getrets-value-beds' class='getrets-value'><?= $detail->beds; ?></span>
-        </div>
-        <?php endif; ?>
-        <?php if ($detail->baths): ?>
-        <div id='getrets-detail-baths' class='getrets-detail'>
-            <span id='getrets-label-baths' class='getrets-label'>Baths:</span> <span id='getrets-value-baths' class='getrets-value'><?= $detail->baths; ?></span>
-        </div>
-        <?php endif; ?>
-        <?php if ($detail->acres): ?>
-        <div id='getrets-detail-acres' class='getrets-detail'>
-            <span id='getrets-label-acres' class='getrets-label'>Acres:</span> <span id='getrets-value-acres' class='getrets-value'><?= $detail->acres; ?></span>
-        </div>
-        <?php endif; ?>
-        <?php if ($detail->lot): ?>
-        <div id='getrets-detail-lot' class='getrets-detail'>
-            <span id='getrets-label-lot' class='getrets-label'>Lot:</span> <span id='getrets-value-lot' class='getrets-value'><?= $detail->lot; ?></span>
-        </div>
-        <?php endif; ?>
-    </div>
-    <div id='getrets-description' class='getrets-description'>
-        <div id='getrets-description-title' class='getrets-title'>
-            Description
-        </div>
-        <?= $description; ?>
-    </div>
-    <?php if ($detail->features): ?>
-    <div id='getrets-features' class='getrets-features'>
-        <div id='getrets-features-title' class='getrets-title'>
-            Features
-        </div>
-        <ul>
-            <?php foreach( $detail->features as $item ): ?>
-            <li><?= $item ?></li>
-            <?php endforeach; ?>
-        </ul>        
-    </div>
-    <?php endif; ?>
-    <?php if ($detail->photoCount > 0): ?>
-    <div id='getrets-photos' class='getrets-photos'>
-        <div id='getrets-photos-title' class='getrets-title'>
-            Photos
-        </div>
-        <?php
-        for ($i = 0; $i < $detail->photoCount; $i++) {
-            $img = $getRets->getListing()->imageUrl($detail->listingSourceURLSlug, $detail->listingTypeURLSlug, $detail->listingID, $i);	
-            echo "<div class='getrets-photo-responsive'><div class='getrets-photo-container'><a target='_blank' href='" . $img . "' class='getrets-photos-link'><img src='" . $img . "?newWidth=200&maxHeight=200' class='getrets-photo' width='200' height='200' /></a></div></div>"; 
-        }
-        unset($photo);
-        ?>
-        <div class="clearfix"></div>
-    </div>
-    <?php endif; ?>
-    <div id='getrets-providedby' class='getrets-providedby'>
-        <span id='getrets-providedby-label' class='getrets-label'>Provided By:</span> <span id='getrets-providedby-value' class='getrets-value'><?= $detail->providedBy; ?></span>
-    </div>
-</div>        
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <?php endif; ?>
-      </div>
-
-      <div class="tab-pane" id="images">
-        <h1>Image Examples</h1>
-        <p class="lead">This section demonstrates the image capabilities.</p>
       </div>
 
     </div><!-- /.container -->
@@ -699,28 +792,53 @@ if (array_key_exists("source", $_GET) && array_key_exists("type", $_GET) && arra
       });
 
       /* search results tabs */
-      var searchResultsNavResults = $('#searchResultsNavResults');
-      var searchResultsNavVarDump = $('#searchResultsNavVarDump');
+      var searchResultsNavMain = $('#searchResultsNavMain');
+      var searchResultsNavData = $('#searchResultsNavData');
       var handleSearchResultsNav = function (showResults) {
-        var searchResultsResults = $('#searchResultsResults');
-        var searchResultsVarDump = $('#searchResultsVarDump');
+        var searchResultsMain = $('#searchResultsMain');
+        var searchResultsData = $('#searchResultsData');
 
-        searchResultsNavResults.removeClass("active");
-        searchResultsNavVarDump.removeClass("active");
-        searchResultsResults.hide();
-        searchResultsVarDump.hide();
+        searchResultsNavMain.removeClass("active");
+        searchResultsNavData.removeClass("active");
+        searchResultsMain.hide();
+        searchResultsData.hide();
 
         if (showResults) {
-          searchResultsNavResults.addClass("active");
-          searchResultsResults.show();
+          searchResultsNavMain.addClass("active");
+          searchResultsMain.show();
         }
         else {
-          searchResultsNavVarDump.addClass("active");
-          searchResultsVarDump.show();
+          searchResultsNavData.addClass("active");
+          searchResultsData.show();
         }
       };
-      searchResultsNavResults.click(function() { handleSearchResultsNav(true); });
-      searchResultsNavVarDump.click(function() { handleSearchResultsNav(false); });
+      searchResultsNavMain.click(function() { handleSearchResultsNav(true); });
+      searchResultsNavData.click(function() { handleSearchResultsNav(false); });
+
+
+      /* details tabs */
+      var detailsNavMain = $('#detailsNavMain');
+      var detailsNavData = $('#detailsNavData');
+      var handledetailsNav = function (showResults) {
+        var detailsMain = $('#detailsMain');
+        var detailsData = $('#detailsData');
+
+        detailsNavMain.removeClass("active");
+        detailsNavData.removeClass("active");
+        detailsMain.hide();
+        detailsData.hide();
+
+        if (showResults) {
+          detailsNavMain.addClass("active");
+          detailsMain.show();
+        }
+        else {
+          detailsNavData.addClass("active");
+          detailsData.show();
+        }
+      };
+      detailsNavMain.click(function() { handledetailsNav(true); });
+      detailsNavData.click(function() { handledetailsNav(false); });
 
 
       $(document).ready(function(){
