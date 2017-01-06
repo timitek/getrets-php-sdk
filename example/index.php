@@ -610,7 +610,7 @@ if (array_key_exists("source", $_GET) && array_key_exists("type", $_GET) && arra
                             <li><strong>Beds:</strong> <?= $detail->beds; ?></li>
                             <li><strong>Baths:</strong> <?= $detail->baths; ?></li>
                             <li><strong><abbr title="Square Feet">Sqft.</abbr>:</strong> <?= $detail->squareFeet; ?></li>
-                            <li><strong>Lot:</strong> <?= $listing->lot; ?></li>
+                            <li><strong>Lot:</strong> <?= $detail->lot; ?></li>
                             <li><strong>Acres:</strong> <?= $detail->acres; ?></li>
                           </ul>
                         </div>
