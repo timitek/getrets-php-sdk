@@ -17,26 +17,72 @@ class ApiClient {
 	}
 	
 	public function getFromApi($getUrl) {
-		$results = json_decode(file_get_contents($getUrl));
+		$contents = null;
+		$results = null;
+
+		if (file_get_contents(__FILE__) && ini_get('allow_url_fopen')) {
+			$contents = file_get_contents($getUrl);
+		}
+		else if (function_exists('curl_version')) {
+			$curl = curl_init();
+			curl_setopt($curl, CURLOPT_URL, $getUrl);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+			$contents = curl_exec($curl);
+			curl_close($curl);
+		}
+		else {
+			die('You have neither cUrl installed nor allow_url_fopen activated. Please setup one of those!');
+		}
+
+		if (!empty($contents)) {
+			$results = json_decode($contents);
+		}
+
 		return $results;
 	}
 	
 	public function postToApi($postUrl, $postData, $encodeData = true) {
-		$content = ($encodeData ? json_encode($postData) : $postData);
-		
-		$context = stream_context_create(array(
-						'http' => array(
-							'method' => 'POST',
-							'header' => "Content-Type: application/json; charset=utf-8\r\n",
-							'content' => $content)));
-						
-		$response = file_get_contents($postUrl, false, $context);
-		
-		if($response === false){
-			die('Error');
+            
+		$contents = null;
+		$results = null;
+                
+		if (file_get_contents(__FILE__) && ini_get('allow_url_fopen')) {
+                        $payload = ($encodeData ? json_encode($postData) : $postData);
+                        $context = stream_context_create(array(
+                                                        'http' => array(
+                                                                'method' => 'POST',
+                                                                'header' => "Content-Type: application/json; charset=utf-8\r\n",
+                                                                'content' => $payload)));
+
+                        $contents = file_get_contents($postUrl, false, $context);
+                        
+                        if($contents === false){
+                                die('Error');
+                        }
 		}
-		
-		return json_decode($response);
+		else if (function_exists('curl_version')) {
+			$curl = curl_init();
+			curl_setopt($curl, CURLOPT_URL, $postUrl);
+                        curl_setopt($curl, CURLOPT_POST, count($postData));
+                        $postFields = null;
+                        foreach($postData as $key => $value) {
+                            $postFields .= $key . '=' . (is_bool($value) ? ($value ? 'true' : 'false') : $value) . '&';
+                        }
+                        //$postFields = http_build_query($postData);
+                        curl_setopt($curl, CURLOPT_POSTFIELDS, $postFields);
+                        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+			$contents = curl_exec($curl);
+			curl_close($curl);
+		}
+		else {
+			die('You have neither cUrl installed nor allow_url_fopen activated. Please setup one of those!');
+		}
+
+		if (!empty($contents)) {
+			$results = json_decode($contents);
+		}
+
+		return $results;
 	}
 }
 
