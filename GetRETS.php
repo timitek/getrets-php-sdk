@@ -115,7 +115,8 @@ class Listing extends ApiClient {
         protected function sortResults($results) {
             $output = $results;
             
-            if (!empty($this->getSortBy())) {
+			$sbCheck = $this->getSortBy();
+            if (!empty($sbCheck)) {
                 usort($output, $this->sort());
             }
             
