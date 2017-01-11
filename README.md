@@ -36,7 +36,7 @@ A simple "no framework" php wrapper for the GetRETS&reg; API from timitek (<http
 # How To Use
 ```php
 include "GetRETS.php";
-use timitek\GetRETS\GetRETS;
+use timitek\getrets\GetRETS;
 $getRets = new GetRETS($customerKey);
 $listings = $getRets->getListing()->searchByKeyword($preparedKeywords);
 ```

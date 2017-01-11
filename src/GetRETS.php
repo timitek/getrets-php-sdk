@@ -1,6 +1,6 @@
 <?php
 
-namespace timitek\GetRETS;
+namespace timitek\getrets;
 
 class ApiClient {
 	private $url = "http://getrets.net";
