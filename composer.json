@@ -1,7 +1,6 @@
 {
     "name": "timitek/getrets",
     "description": "A simple \"no framework\" php wrapper for the GetRETS API from timitek (http://www.timitek.com).  GetRETS is a product / service developed by timitek that makes it possible to quickly build real estate related applications for pulling listing data from several MLS's without having to know anything about RETS or IDX or worry about the pains of mapping and storing listing data from these various sources.  GetRETS® as a service provides a RESTful API endpoint for consuming the data, and although it's not limited to only being used in PHP applications, and users aren't required to use our SDK, we have provided a simple PHP SDK for the API and set of documentation for it's use.  Live Demo at: http://www.timitek.com/phpsdk/",
-    "version": "1.0.3",
     "license": "GPL-3.0",
     "keywords": ["RETS", "IDX", "Realty", "Real Estate"],
     "homepage": "http://www.timitek.com/phpsdk/",
@@ -18,7 +17,7 @@
         "source": "https://github.com/timitek/getrets-php-sdk",
         "docs": "https://github.com/timitek/getrets-php-sdk/tree/master/docs"
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require": {
         "php": ">=5.4.45"
     },
