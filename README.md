@@ -34,6 +34,17 @@ A simple "no framework" php wrapper for the GetRETS&reg; API from timitek (<http
 ***
 
 # How To Use
+
+## Download / Install
+All that is required is to download the single GetRETS.php file from src for use in your projects.
+
+Optionally you may use composer to install.
+```
+composer require timitek/getrets
+```
+
+## Traditional PHP Use
+
 ```php
 include "GetRETS.php";
 use timitek\getrets\GetRETS;

@@ -57,6 +57,17 @@
 
 <h1 id="toc_2">How To Use</h1>
 
+<h2 id="toc_3">Download / Install</h2>
+
+<p>All that is required is to download the single GetRETS.php file from src for use in your projects.</p>
+
+<p>Optionally you may use composer to install.</p>
+
+<pre><code>composer require timitek/getrets
+</code></pre>
+
+<h2 id="toc_4">Traditional PHP Use</h2>
+
 <pre><code class="php"><span class="keyword">include</span> <span class="string">"GetRETS.php"</span>;
 <span class="keyword">use</span> timitek\getrets\GetRETS;
 <span class="variable">$getRets</span> = <span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>);
@@ -65,7 +76,7 @@
 
 <hr>
 
-<h1 id="toc_3">Listing</h1>
+<h1 id="toc_5">Listing</h1>
 
 <blockquote>
 <p>The main controller for working with the listings using the pre-fetched / cached data.</p>
@@ -94,7 +105,7 @@
 
 <hr>
 
-<h2 id="toc_4">searchByKeyword</h2>
+<h2 id="toc_6">searchByKeyword</h2>
 
 <blockquote>
 <p>Search for listings by keyword</p>
@@ -107,11 +118,11 @@
 
 <p>A simple search that will retrieve listings by a keyword search.</p>
 
-<h3 id="toc_5">Parameters</h3>
+<h3 id="toc_7">Parameters</h3>
 
 <p><strong><em>keyword</em></strong> - Keywords to search on</p>
 
-<h3 id="toc_6">Returns</h3>
+<h3 id="toc_8">Returns</h3>
 
 <p>An array of <strong>CondensedListing</strong>&#39;s</p>
 
@@ -138,7 +149,7 @@
 
 <hr>
 
-<h2 id="toc_7">search</h2>
+<h2 id="toc_9">search</h2>
 
 <blockquote>
 <p>Advanced search</p>
@@ -151,7 +162,7 @@
 
 <p>A more advanced search that retrieves listings constrained by the optional parameters.</p>
 
-<h3 id="toc_8">Parameters</h3>
+<h3 id="toc_10">Parameters</h3>
 
 <p><strong><em>keyword</em></strong> - Keywords to search on</p>
 
@@ -167,7 +178,7 @@
 
 <p><em>Note</em> - If you don&#39;t set any of the <em>include</em> parameters, all will be assumed as set.</p>
 
-<h3 id="toc_9">Returns</h3>
+<h3 id="toc_11">Returns</h3>
 
 <p>An array of <strong>CondensedListing</strong>&#39;s</p>
 
@@ -194,7 +205,7 @@
 
 <hr>
 
-<h2 id="toc_10">details</h2>
+<h2 id="toc_12">details</h2>
 
 <blockquote>
 <p>Get details for a specific listing</p>
@@ -207,7 +218,7 @@
 
 <p>Retrieves the more specific / non condensed details for a listing.  You will typically use the values returned from search functions as the parameters.</p>
 
-<h3 id="toc_11">Parameters</h3>
+<h3 id="toc_13">Parameters</h3>
 
 <p><strong><em>listingSource</em></strong> - A string representation of the MLS listing source (see FeedsModels.Models.enumListingSource)</p>
 
@@ -215,7 +226,7 @@
 
 <p><strong><em>listingId</em></strong> - The unique ID for the listing to retrieve the listing for</p>
 
-<h3 id="toc_12">Returns</h3>
+<h3 id="toc_14">Returns</h3>
 
 <p>A single <strong>Listing</strong></p>
 
@@ -245,7 +256,7 @@
 
 <hr>
 
-<h2 id="toc_13">imageUrl</h2>
+<h2 id="toc_15">imageUrl</h2>
 
 <blockquote>
 <p>Get URL to use for displaying an image</p>
@@ -262,7 +273,7 @@
 
 <p>Also, fetching the first photo ($photoId = 0) is a suggested strategy for displaying a thumbnail image.</p>
 
-<h3 id="toc_14">Parameters</h3>
+<h3 id="toc_16">Parameters</h3>
 
 <p><strong><em>listingSource</em></strong> - A string representation of the MLS listing source (see FeedsModels.Models.enumListingSource)</p>
 
@@ -276,13 +287,13 @@
 
 <p><strong><em>height</em></strong> - The height to be used for resizing the photo</p>
 
-<h3 id="toc_15">Returns</h3>
+<h3 id="toc_17">Returns</h3>
 
 <p>A URL for the image specified</p>
 
 <hr>
 
-<h1 id="toc_16">RETSListing</h1>
+<h1 id="toc_18">RETSListing</h1>
 
 <blockquote>
 <p>The main controller for working with the listings using the the live data contained at the MLS using RETS.</p>
@@ -313,7 +324,7 @@
 
 <hr>
 
-<h2 id="toc_17">searchByKeyword</h2>
+<h2 id="toc_19">searchByKeyword</h2>
 
 <blockquote>
 <p>Search for listings by keyword</p>
@@ -326,11 +337,11 @@
 
 <p>A simple search that will retrieve listings by a keyword search.</p>
 
-<h3 id="toc_18">Parameters</h3>
+<h3 id="toc_20">Parameters</h3>
 
 <p><strong><em>keyword</em></strong> - Keywords to search on</p>
 
-<h3 id="toc_19">Returns</h3>
+<h3 id="toc_21">Returns</h3>
 
 <p>An array of <strong>CondensedListing</strong>&#39;s</p>
 
@@ -357,7 +368,7 @@
 
 <hr>
 
-<h2 id="toc_20">search</h2>
+<h2 id="toc_22">search</h2>
 
 <blockquote>
 <p>Advanced search</p>
@@ -370,7 +381,7 @@
 
 <p>A more advanced search that retrieves listings constrained by the optional parameters.</p>
 
-<h3 id="toc_21">Parameters</h3>
+<h3 id="toc_23">Parameters</h3>
 
 <p><strong><em>keyword</em></strong> - Keywords to search on</p>
 
@@ -386,7 +397,7 @@
 
 <p><em>Note</em> - If you don&#39;t set any of the <em>include</em> parameters, all will be assumed as set.</p>
 
-<h3 id="toc_22">Returns</h3>
+<h3 id="toc_24">Returns</h3>
 
 <p>An array of <strong>CondensedListing</strong>&#39;s</p>
 
@@ -413,7 +424,7 @@
 
 <hr>
 
-<h2 id="toc_23">details</h2>
+<h2 id="toc_25">details</h2>
 
 <blockquote>
 <p>Get details for a specific listing</p>
@@ -426,7 +437,7 @@
 
 <p>Retrieves the more specific / non condensed details for a listing.  You will typically use the values returned from search functions as the parameters.</p>
 
-<h3 id="toc_24">Parameters</h3>
+<h3 id="toc_26">Parameters</h3>
 
 <p><strong><em>listingSource</em></strong> - A string representation of the MLS listing source (see FeedsModels.Models.enumListingSource)</p>
 
@@ -434,7 +445,7 @@
 
 <p><strong><em>listingId</em></strong> - The unique ID for the listing to retrieve the listing for</p>
 
-<h3 id="toc_25">Returns</h3>
+<h3 id="toc_27">Returns</h3>
 
 <p>A single <strong>Listing</strong></p>
 
@@ -464,7 +475,7 @@
 
 <hr>
 
-<h2 id="toc_26">imageUrl</h2>
+<h2 id="toc_28">imageUrl</h2>
 
 <blockquote>
 <p>Get URL to use for displaying an image</p>
@@ -481,7 +492,7 @@
 
 <p>Also, fetching the first photo ($photoId = 0) is a suggested strategy for displaying a thumbnail image.</p>
 
-<h3 id="toc_27">Parameters</h3>
+<h3 id="toc_29">Parameters</h3>
 
 <p><strong><em>listingSource</em></strong> - A string representation of the MLS listing source (see FeedsModels.Models.enumListingSource)</p>
 
@@ -495,13 +506,13 @@
 
 <p><strong><em>height</em></strong> - The height to be used for resizing the photo</p>
 
-<h3 id="toc_28">Returns</h3>
+<h3 id="toc_30">Returns</h3>
 
 <p>A URL for the image specified</p>
 
 <hr>
 
-<h2 id="toc_29">executeDMQL</h2>
+<h2 id="toc_31">executeDMQL</h2>
 
 <blockquote>
 <p>Return MLS results via a DMQL query</p>
@@ -516,7 +527,7 @@
 
 <p><strong><em>Special Note</em></strong> - These results will not be returned in a translated fashion similiar to the other listing detail searches.  These results are in the format as returned from the MLS RETS server.  If you wish to retrieve listings in a <strong>translated</strong> format use getListingsByDMQL.</p>
 
-<h3 id="toc_30">Parameters</h3>
+<h3 id="toc_32">Parameters</h3>
 
 <p><strong><em>query</em></strong> - The DMQL to be executed against the MLS RETS server</p>
 
@@ -524,7 +535,7 @@
 
 <p><strong><em>listingType</em></strong> - A string representation of the listing type such as residential, land etc.. (see FeedsModels.Models.enumListingType)</p>
 
-<h3 id="toc_31">Returns</h3>
+<h3 id="toc_33">Returns</h3>
 
 <p>An enveloped response with the success or failure of the query, as well as the raw serialized results that were fetched.  These serialized results will be different for each feedName and listingType.</p>
 
@@ -542,7 +553,7 @@
 
 <hr>
 
-<h2 id="toc_32">getListingsByDMQL</h2>
+<h2 id="toc_34">getListingsByDMQL</h2>
 
 <blockquote>
 <p>Get translated listings by DMQL query</p>
@@ -555,7 +566,7 @@
 
 <p>This is a powerful function that will execute raw DMQL against the RETS MLS server and will return the results as a serialized object.  It is similar to executeDMQL, however this function will <strong>translate</strong> data to be in the same format as returned by other methods that retrieve listing details.</p>
 
-<h3 id="toc_33">Parameters</h3>
+<h3 id="toc_35">Parameters</h3>
 
 <p><strong><em>query</em></strong> - The DMQL to be executed against the MLS RETS server</p>
 
@@ -563,7 +574,7 @@
 
 <p><strong><em>listingType</em></strong> - A string representation of the listing type such as residential, land etc.. (see FeedsModels.Models.enumListingType)</p>
 
-<h3 id="toc_34">Returns</h3>
+<h3 id="toc_36">Returns</h3>
 
 <p>An enveloped response with the success or failure of the query, as well as the raw serialized results that were fetched.</p>
 
@@ -600,7 +611,7 @@
 
 <hr>
 
-<h1 id="toc_35">Geocoding</h1>
+<h1 id="toc_37">Geocoding</h1>
 
 <blockquote>
 <p>The main controller for working with addresses</p>
@@ -617,7 +628,7 @@
 
 <hr>
 
-<h2 id="toc_36">parseGoogleResults</h2>
+<h2 id="toc_38">parseGoogleResults</h2>
 
 <blockquote>
 <p>Translates results returned by Google</p>
@@ -630,7 +641,7 @@
 
 <p>This function will parse the results returned from Google&#39;s service and translate them into a consistent format more suitable for searching the listing data.</p>
 
-<h3 id="toc_37">Parameters</h3>
+<h3 id="toc_39">Parameters</h3>
 
 <p><strong><em>googleResults</em></strong> - Results from Google&#39;s geocoder.geocode</p>
 
@@ -673,7 +684,7 @@
 ]
 </code></pre>
 
-<h3 id="toc_38">Returns</h3>
+<h3 id="toc_40">Returns</h3>
 
 <p>Data translated as <strong>AddressDetail</strong>&#39;s.</p>
 
@@ -696,7 +707,7 @@
 
 <hr>
 
-<h2 id="toc_39">googleGeocode</h2>
+<h2 id="toc_41">googleGeocode</h2>
 
 <blockquote>
 <p>Geocode address entered as free-form text</p>
@@ -709,11 +720,11 @@
 
 <p>This function will take a keyword and run it through Google&#39;s geocoding service and return the translated results.</p>
 
-<h3 id="toc_40">Parameters</h3>
+<h3 id="toc_42">Parameters</h3>
 
 <p><strong><em>address</em></strong> - A free form text to geocode (The expectation is that this is a possible address)</p>
 
-<h3 id="toc_41">Returns</h3>
+<h3 id="toc_43">Returns</h3>
 
 <p>Data translated as <strong>AddressDetail</strong>&#39;s.</p>
 
@@ -736,13 +747,13 @@
 
 <hr>
 
-<h1 id="toc_42">Helper Functions</h1>
+<h1 id="toc_44">Helper Functions</h1>
 
 <p>The following methods aren&#39;t API endpoints but are available in the SDK for assistance with the functionality.</p>
 
 <hr>
 
-<h2 id="toc_43">setSortBy / setReverseSort</h2>
+<h2 id="toc_45">setSortBy / setReverseSort</h2>
 
 <blockquote>
 <p>Used for sorting / ordering the results that are returned</p>
@@ -773,7 +784,7 @@
 
 <hr>
 
-<h1 id="toc_44">Further Reading</h1>
+<h1 id="toc_46">Further Reading</h1>
 
 <p>More information on the API itself can be found at the Swagger UI (<a href="http://getrets.net/swagger/">http://getrets.net/swagger/</a>). </p>
 
