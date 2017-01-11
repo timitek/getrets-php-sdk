@@ -17,7 +17,8 @@
         "source": "https://github.com/timitek/getrets-php-sdk",
         "docs": "https://github.com/timitek/getrets-php-sdk/tree/master/docs"
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "php": ">=5.4.45"
     },
