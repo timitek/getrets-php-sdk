@@ -2,7 +2,7 @@
 
 include "../src/GetRETS.php";
 
-use timitek\GetRETS\GetRETS;
+use timitek\getrets\GetRETS;
 
 ini_set('max_execution_time', 300);  // Give enough time (5 mintues) for slow DMQL queries
 
