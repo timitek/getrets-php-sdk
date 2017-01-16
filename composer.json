@@ -30,7 +30,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Timitek\\GetRETS": "src/"
+            "Timitek\\GetRETS\\": "src/"
         }
     }
 }
