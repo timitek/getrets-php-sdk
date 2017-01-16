@@ -47,7 +47,7 @@ composer require timitek/getrets
 
 ```php
 include "GetRETS.php";
-use timitek\getrets\GetRETS;
+use Timitek\GetRETS\GetRETS;
 $getRets = new GetRETS($customerKey);
 $listings = $getRets->getListing()->searchByKeyword($preparedKeywords);
 ```
