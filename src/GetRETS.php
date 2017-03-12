@@ -134,9 +134,9 @@ class Listing extends ApiClient {
 		$postData = array('Keyword' => $keyword,
 						  'MaxPrice' => intval($maxPrice),
 						  'MinPrice' => intval($minPrice),
-						  'IncludeResidential' => boolval($includeResidential),
-						  'IncludeLand' => boolval($includeLand),
-						  'IncludeCommercial' => boolval($includeCommercial));
+						  'IncludeResidential' => (is_bool($includeResidential) ? ($includeResidential ? true : false) : $includeResidential),
+						  'IncludeLand' => (is_bool($includeLand) ? ($includeLand ? true : false) : $includeLand),
+						  'IncludeCommercial' => (is_bool($includeCommercial) ? ($includeCommercial ? true : false) : $includeCommercial));
 
 		$results = $this->postToAPI($this->getUrl() . '/api/' . $this->getCustomerKey() . '/'. $this->getSearchType() . '/Search', $postData);
                 
