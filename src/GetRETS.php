@@ -130,10 +130,13 @@ class Listing extends ApiClient {
             return $this->sortResults($results);
 	}
 
-	public function search($keyword, $maxPrice, $minPrice, $includeResidential, $includeLand, $includeCommercial) {
+	public function search($keyword, $extra, $maxPrice, $minPrice, $beds, $baths, $includeResidential, $includeLand, $includeCommercial) {
 		$postData = array('Keyword' => $keyword,
+						  'Extra' => (empty($extra) ? null : explode(",", $extra)),
 						  'MaxPrice' => intval($maxPrice),
 						  'MinPrice' => intval($minPrice),
+						  'Beds' => intval($beds),
+						  'Baths' => floatval($baths),
 						  'IncludeResidential' => (is_bool($includeResidential) ? ($includeResidential ? true : false) : $includeResidential),
 						  'IncludeLand' => (is_bool($includeLand) ? ($includeLand ? true : false) : $includeLand),
 						  'IncludeCommercial' => (is_bool($includeCommercial) ? ($includeCommercial ? true : false) : $includeCommercial));
