@@ -157,7 +157,7 @@
 
 <p><a href="http://getrets.net/swagger/ui/index#!/Listing/Listing_Search">Swagger Documentation</a></p>
 
-<pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getListing()-&gt;search(<span class="variable">$keywords</span>, <span class="variable">$maxPrice</span>, <span class="variable">$minPrice</span>, <span class="variable">$includeResidential</span>, <span class="variable">$includeLand</span>, <span class="variable">$includeCommercial</span>);
+<pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getListing()-&gt;search(<span class="variable">$keywords</span>, <span class="variable">$extra</span>, <span class="variable">$maxPrice</span>, <span class="variable">$minPrice</span>, <span class="variable">$beds</span>, <span class="variable">$baths</span>, <span class="variable">$includeResidential</span>, <span class="variable">$includeLand</span>, <span class="variable">$includeCommercial</span>);
 </code></pre>
 
 <p>A more advanced search that retrieves listings constrained by the optional parameters.</p>
@@ -166,9 +166,15 @@
 
 <p><strong><em>keyword</em></strong> - Keywords to search on</p>
 
+<p><strong><em>extra</em></strong> - <em>(optional)</em> Comma seperated list of extra terms to search for (golf, lake, etc...)</p>
+
 <p><strong><em>maxPrice</em></strong> - <em>(optional)</em> The maximum listing price</p>
 
 <p><strong><em>minPrice</em></strong> - <em>(optional)</em> The minimum listing price</p>
+
+<p><strong><em>beds</em></strong> - <em>(optional)</em> The minimum number of beds to require</p>
+
+<p><strong><em>baths</em></strong> - <em>(optional)</em> The minimum number of baths to require</p>
 
 <p><strong><em>includeResidential</em></strong> - <em>(optional)</em> Include residential listings</p>
 
@@ -376,7 +382,7 @@
 
 <p><a href="http://getrets.net/swagger/ui/index#!/Listing/Listing_Search">Swagger Documentation</a></p>
 
-<pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getRETSListing()-&gt;search(<span class="variable">$keywords</span>, <span class="variable">$maxPrice</span>, <span class="variable">$minPrice</span>, <span class="variable">$includeResidential</span>, <span class="variable">$includeLand</span>, <span class="variable">$includeCommercial</span>);
+<pre><code class="php">(<span class="keyword">new</span> GetRETS(<span class="variable">$customerKey</span>))-&gt;getRETSListing()-&gt;search(<span class="variable">$keywords</span>, <span class="variable">$extra</span>, <span class="variable">$maxPrice</span>, <span class="variable">$minPrice</span>, <span class="variable">$beds</span>, <span class="variable">$baths</span>, <span class="variable">$includeResidential</span>, <span class="variable">$includeLand</span>, <span class="variable">$includeCommercial</span>);
 </code></pre>
 
 <p>A more advanced search that retrieves listings constrained by the optional parameters.</p>
@@ -385,9 +391,15 @@
 
 <p><strong><em>keyword</em></strong> - Keywords to search on</p>
 
+<p><strong><em>extra</em></strong> - <em>(optional)</em> Comma seperated list of extra terms to search for (golf, lake, etc...)</p>
+
 <p><strong><em>maxPrice</em></strong> - <em>(optional)</em> The maximum listing price</p>
 
 <p><strong><em>minPrice</em></strong> - <em>(optional)</em> The minimum listing price</p>
+
+<p><strong><em>beds</em></strong> - <em>(optional)</em> The minimum number of beds to require</p>
+
+<p><strong><em>baths</em></strong> - <em>(optional)</em> The minimum number of baths to require</p>
 
 <p><strong><em>includeResidential</em></strong> - <em>(optional)</em> Include residential listings</p>
 
