@@ -6,7 +6,7 @@ use Timitek\GetRETS\GetRETS;
 
 ini_set('max_execution_time', 300);  // Give enough time (5 mintues) for slow DMQL queries
 
-$customerKey = 'aspirerealty';
+$customerKey = '';
 
 $isPublic = false;
 $exampleAddress = "sheridan, ar";
@@ -197,7 +197,7 @@ if (array_key_exists("source", $_GET) && array_key_exists("type", $_GET) && arra
               <h1>Customer Key Required!</h1>
               <p class="lead">
                 To run this example, you must have a valid customer key.<br />
-                Set the customer key on line 7 of this file.<br />
+                Set the customer key on line 9 of this file.<br />
                 If you do not have a customer key, you can obtain an evaluation key from <a href="http://www.timitek.com/" target="_blank">www.timitek.com</a><br />
                 If you want to see a running instance of this example please visit <a href="http://www.timitek.com/phpsdk/" target="_blank">www.timitek.com/phpsdk/</a>
               </p>
