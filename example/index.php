@@ -6,11 +6,11 @@ use Timitek\GetRETS\GetRETS;
 
 ini_set('max_execution_time', 300);  // Give enough time (5 mintues) for slow DMQL queries
 
-$customerKey = '';
+$customerKey = 'c21united';
 
 $isPublic = false;
-$exampleAddress = "sheridan, ar";
-$exampleSource = "CARMLS";
+$exampleAddress = "el dorado, ar";
+$exampleSource = "ezMLS";
 
 $disableCache = !empty($_POST["disableCache"]);
 $keywords = (array_key_exists("keywords", $_POST) ? $_POST["keywords"] : $exampleAddress );
@@ -49,12 +49,16 @@ if (!empty($_POST)) {
     $preparedKeywords = htmlspecialchars($_POST["keywords"]);
     if ($disableCache) {
       $listings = $getRets->getRETSListing()
-                          ->setSortBy($sortBy)->setReverseSort($reverseSort)
+                          ->setLimit(10)
+                          ->setSortBy($sortBy)
+                          ->setReverseSort($reverseSort)
                           ->searchByKeyword($preparedKeywords);
     }
     else {
       $listings = $getRets->getListing()
-                          ->setSortBy($sortBy)->setReverseSort($reverseSort)
+                          ->setLimit(10)
+                          ->setSortBy($sortBy)
+                          ->setReverseSort($reverseSort)
                           ->searchByKeyword($preparedKeywords);
     }
   }
@@ -62,12 +66,16 @@ if (!empty($_POST)) {
   else if (array_key_exists("search", $_POST)) {
     if ($disableCache) {
       $listings = $getRets->getRETSListing()
-                          ->setSortBy($sortBy)->setReverseSort($reverseSort)
+                          ->setLimit(10)
+                          ->setSortBy($sortBy)
+                          ->setReverseSort($reverseSort)
                           ->search($keywords, $extra, $maxPrice, $minPrice, $beds, $baths, $includeResidential, $includeLand, $includeCommercial);
     }
     else {
       $listings = $getRets->getListing()
-                          ->setSortBy($sortBy)->setReverseSort($reverseSort)
+                          ->setLimit(10)
+                          ->setSortBy($sortBy)
+                          ->setReverseSort($reverseSort)
                           ->search($keywords, $extra, $maxPrice, $minPrice, $beds, $baths, $includeResidential, $includeLand, $includeCommercial);
     }
   }
@@ -81,7 +89,9 @@ if (!empty($_POST)) {
   // Return Listings by DMQL
   else if (array_key_exists("getListingsByDMQL", $_POST)) {
     $results = $getRets->getRETSListing()
-                       ->setSortBy($sortBy)->setReverseSort($reverseSort)
+                       ->setLimit(10)
+                       ->setSortBy($sortBy)
+                       ->setReverseSort($reverseSort)
                        ->getListingsByDMQL($dmql, $exampleSource, "Residential");
     if (!empty($results)) {
       if ($results->success && !empty($results->data)) {
@@ -278,7 +288,7 @@ if (array_key_exists("source", $_GET) && array_key_exists("type", $_GET) && arra
                   <p>Available for both cached (<a href="https://github.com/timitek/getrets-php-sdk#searchbykeyword" target="_blank">documentation</a>) and RETS (<a href="https://github.com/timitek/getrets-php-sdk#searchbykeyword-1" target="_blank">documentation</a>).</p>
                   <blockquote><p>Search for listings by keyword</p></blockquote>
                   <p><a href="http://getrets.net/swagger/ui/index#!/Listing/Listing_SearchByKeyword" target="_blank">Swagger Documentation</a></p>
-                  <pre>(new GetRETS($customerKey))->getListing()->searchByKeyword($preparedKeywords);</pre>
+                  <pre>(new GetRETS($customerKey))->setLimit(10)->getListing()->searchByKeyword($preparedKeywords);</pre>
                   <p>A simple search that will retrieve listings by a keyword search.</p>
                 </div>
               </div>
@@ -469,7 +479,7 @@ if (array_key_exists("source", $_GET) && array_key_exists("type", $_GET) && arra
                         <div class="panel-body">
                           <blockquote><p>Used for sorting / ordering the results that are returned</p></blockquote>
                           <p><a href="https://github.com/timitek/getrets-php-sdk#setsortby--setreversesort" target="_blank">Documentation</a></p>
-                          <pre>(new GetRETS($customerKey))->getListing()->setSortBy("providedBy")->setReverseSort(true)->searchByKeyword($preparedKeywords);</pre>
+                          <pre>(new GetRETS($customerKey))->getListing()->setLimit(10)->setSortBy("providedBy")->setReverseSort(true)->searchByKeyword($preparedKeywords);</pre>
                         </div>
                       </div>
 

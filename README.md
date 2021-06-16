@@ -691,6 +691,15 @@ The following methods aren't API endpoints but are available in the SDK for assi
 
 ***
 
+## setLimit
+> Used for limiting the results returned
+
+```php
+(new GetRETS($customerKey))->getListing()->setLimit(10)->searchByKeyword($preparedKeywords);
+```
+
+This property is used to limit the number of results returned. *(Default is null meaning no limitation)*
+
 ## setSortBy / setReverseSort
 > Used for sorting / ordering the results that are returned
 

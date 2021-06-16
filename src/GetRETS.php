@@ -97,37 +97,52 @@ class Listing extends ApiClient {
 	public function getSortBy() { return $this->sortBy; }
 	public function setSortBy($value) { $this->sortBy = $value; return $this; }
         
-        private $reverseSort = false;
+    private $reverseSort = false;
 	public function getReverseSort() { return $this->reverseSort; }
 	public function setReverseSort($value) { $this->reverseSort = $value; return $this; }
+
+	private $limit = null;
+	public function getLimit() { return $this->limit; }
+	public function setLimit($value) { $this->limit = $value; return $this; }
         
-        protected function sort() {
-            $key = $this->getSortBy();
-            $reverse = $this->getReverseSort();
-            return function ($a, $b) use ($key, $reverse) {
-                if (is_string($a->$key)) {
-                    return strcmp($a->$key, $b->$key) * ($reverse ? -1 : 1);
-                }
-                else {
-                    return ($reverse ? $a->$key < $b->$key : $a->$key > $b->$key);
-                }
-            };
-        }
-        
-        protected function sortResults($results) {
-            $output = $results;
-            
-			$sbCheck = $this->getSortBy();
-            if (!empty($sbCheck)) {
-                usort($output, $this->sort());
-            }
-            
-            return $output;
-        }
+	protected function sort() {
+		$key = $this->getSortBy();
+		$reverse = $this->getReverseSort();
+		return function ($a, $b) use ($key, $reverse) {
+			if (is_string($a->$key)) {
+				return strcmp($a->$key, $b->$key) * ($reverse ? -1 : 1);
+			}
+			else {
+				return ($reverse ? $a->$key < $b->$key : $a->$key > $b->$key);
+			}
+		};
+	}
+	
+	protected function processResults($results) {
+		$output = $this->sortResults($results);
+
+		$limit = $this->getLimit();
+		if (!empty($limit) && !empty($output) && count($output) > $limit) {
+			$output = array_slice($output, 0, $limit);
+		}
+
+		return $output;
+	}
+
+	protected function sortResults($results) {
+		$output = $results;
+		
+		$sbCheck = $this->getSortBy();
+		if (!empty($sbCheck)) {
+			usort($output, $this->sort());
+		}
+		
+		return $output;
+	}
 	
 	public function searchByKeyword($keyword) {
-            $results = $this->getFromAPI($this->getUrl() . '/api/' . $this->getCustomerKey() . '/'. $this->searchType . '/SearchByKeyword/' . rawurlencode($keyword));
-            return $this->sortResults($results);
+		$results = $this->getFromAPI($this->getUrl() . '/api/' . $this->getCustomerKey() . '/'. $this->searchType . '/SearchByKeyword/' . rawurlencode($keyword));
+		return $this->processResults($results);
 	}
 
 	public function search($keyword, $extra, $maxPrice, $minPrice, $beds, $baths, $includeResidential, $includeLand, $includeCommercial) {
@@ -143,7 +158,7 @@ class Listing extends ApiClient {
 
 		$results = $this->postToAPI($this->getUrl() . '/api/' . $this->getCustomerKey() . '/'. $this->getSearchType() . '/Search', $postData);
                 
-                return $this->sortResults($results);
+		return $this->processResults($results);
 	}
 
 	public function details($listingSource, $listingType, $listingId) {
@@ -167,10 +182,10 @@ class RETSListing extends Listing {
 
 	public function getListingsByDMQL($query, $feedName, $listingType) {
 		$results = $this->getFromAPI($this->getUrl() . '/api/' . $this->getCustomerKey() . '/RETSListing/GetListingsByDMQL/' . $feedName . '/' . '?query=' . rawurlencode($query) . '&listingType=' . $listingType);
-                if ($results && $results->data) {
-                    $results->data = $this->sortResults($results->data);
-                }
-                return $results;
+		if ($results && $results->data) {
+			$results->data = $this->processResults($results->data);
+		}
+		return $results;
 	}
 
 	public function executeDMQL($query, $feedName, $listingType) {
